@@ -10,6 +10,11 @@ if (MSVC)
 	set(CMAKE_SYSTEM_VERSION 10.0)
 endif()
 
+# Here we include our custom triplets for VCPKG
+# The reason for the custom triplets is if we want to mix static and dynamic libraries.
+# Currently we are using static libraries for everything.
+set(VCPKG_OVERLAY_TRIPLETS ${CMAKE_SOURCE_DIR}/vcpkg_config/triplets)
+
 project(msr
 	VERSION 1.0.0
 	LANGUAGES CXX)
