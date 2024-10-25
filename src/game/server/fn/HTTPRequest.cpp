@@ -172,6 +172,67 @@ bool HTTPRequest::AsyncSendRequest()
 	return m_Promise.get_future().get();
 }
 
+void HTTPRequest::AsyncSendRequestDiscard()
+{
+	if (m_Handle)
+		return;
+
+	m_iRequestState = RequestState::REQUEST_EXECUTED;
+
+	m_Handle = curl_easy_init();
+	curl_easy_setopt(m_Handle, CURLOPT_URL, m_sPchAPIUrl);
+	curl_easy_setopt(m_Handle, CURLOPT_SSL_VERIFYPEER, 0L);
+	curl_easy_setopt(m_Handle, CURLOPT_SSL_VERIFYHOST, 0L);
+	curl_easy_setopt(m_Handle, CURLOPT_NOSIGNAL, 1L);
+
+	switch (m_eHTTPMethod)
+	{
+		case HTTPMethod::GET:
+			break;
+		case HTTPMethod::POST:
+			curl_easy_setopt(m_Handle, CURLOPT_POST, 1);
+			break;
+		case HTTPMethod::DEL:
+			curl_easy_setopt(m_Handle, CURLOPT_CUSTOMREQUEST, "DELETE");
+			break;
+		case HTTPMethod::PUT:
+			curl_easy_setopt(m_Handle, CURLOPT_CUSTOMREQUEST, "PUT");
+			break;
+	}
+
+	// Process request body.
+	if (m_sRequestBody != nullptr)
+	{
+		char steamID64String[REQUEST_URL_SIZE];
+		_snprintf(steamID64String, REQUEST_URL_SIZE, "%llu", m_iSteamID64);
+
+		rapidjson::StringBuffer s;
+		rapidjson::Writer<rapidjson::StringBuffer> writer(s);
+
+		writer.StartObject();
+
+		writer.Key("steamid");
+		writer.String(steamID64String);
+
+		writer.Key("slot");
+		writer.Int(m_iSlot);
+
+		writer.Key("size");
+		writer.Int(m_iRequestBodySize);
+
+		writer.Key("data");
+		writer.String(base64_encode(m_sRequestBody, m_iRequestBodySize).c_str());
+
+		writer.EndObject();
+
+		const std::string buffer = s.GetString();
+		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDS, buffer.c_str());
+	}
+
+	// we use a lambda here because we don't care about the result
+	auto future = std::async(std::launch::async, &HTTPRequest::PerformRequest, this);
+}
+
 bool HTTPRequest::PerformRequest()
 {
 	if (!m_Handle) 

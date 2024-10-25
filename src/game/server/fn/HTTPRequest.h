@@ -38,6 +38,7 @@ public:
 
 	bool SendRequest();
 	bool AsyncSendRequest();
+	void AsyncSendRequestDiscard();
 
 	int m_iRequestState;
 
