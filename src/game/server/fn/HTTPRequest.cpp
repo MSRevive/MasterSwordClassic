@@ -240,7 +240,8 @@ bool HTTPRequest::PerformRequest()
 
 	bool success = false;
 	curl_easy_setopt(m_Handle, CURLOPT_USERAGENT, "MSR Game Server");
-	curl_easy_setopt(m_Handle, CURLOPT_WRITEFUNCTION, &HTTPRequest::WriteCallbackEvent);
+	curl_easy_setopt(m_Handle, CURLOPT_WRITEFUNCTION, HTTPRequest::WriteCallbackDispatcher);
+	curl_easy_setopt(m_Handle, CURLOPT_WRITEDATA, this);
 	CURLcode result = curl_easy_perform(m_Handle);
 	if (result == CURLE_OK)
 	{
@@ -258,11 +259,15 @@ bool HTTPRequest::PerformRequest()
 	return success;
 }
 
-size_t HTTPRequest::WriteCallbackEvent(char* buf, size_t size, size_t nmemb, void* up)
+size_t HTTPRequest::WriteCallbackDispatcher(void* buf, size_t sz, size_t n, void* curlGet)
 {
-	m_sResponseBody.clear();
-	m_sResponseBody.append(buf, size * nmemb);
-	return (size * nmemb);
+	return static_cast<HTTPRequest*>(curlGet)->WriteCallback(buf, sz, n);
+}
+
+size_t HTTPRequest::WriteCallback(void* ptr, size_t size, size_t nmemb)
+{
+	m_sResponseBody.append((char*)ptr, size * nmemb);
+	return size * nmemb;
 }
 
 void HTTPRequest::ResponseCallback(int httpCode)
@@ -295,15 +300,15 @@ void HTTPRequest::ResponseCallback(int httpCode)
 		return;
 	}
 
-	JSONDocument* jsonDoc = ParseJSON(m_sResponseBody.c_str());
-	if (!jsonDoc)
+	if (m_sResponseBody.empty())
 	{
 		FNShared::Print("The data hasn't been received. HTTP code: %d\n", httpCode);
 		OnResponse(true, nullptr, httpCode);
 		m_iRequestState = RequestState::REQUEST_FINISHED;
 		return;
 	}
-
+	
+	JSONDocument* jsonDoc = ParseJSON(m_sResponseBody.c_str());
 	OnResponse(true, jsonDoc);
 	delete jsonDoc;
 	m_iRequestState = RequestState::REQUEST_FINISHED;

@@ -64,7 +64,9 @@ protected: // Expose data to inheriting classes.
 	ID64 m_iSlot;
 
 private: // Keep this private.
-	size_t WriteCallbackEvent(char* buf, size_t size, size_t nmemb, void* up);
+	static size_t WriteCallbackDispatcher(void* buf, size_t sz, size_t n, void* curlGet);
+	size_t WriteCallback(void* ptr, size_t size, size_t nmemb);
+
 	void ResponseCallback(int httpCode);
 	static JSONDocument* ParseJSON(const char* data, size_t length = 0);
 	void Cleanup();
