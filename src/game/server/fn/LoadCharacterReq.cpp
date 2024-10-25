@@ -18,7 +18,10 @@ LoadCharacterRequest::LoadCharacterRequest(ID64 steamID, ID64 slot, const char* 
 void LoadCharacterRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc, int iRespCode)
 {
 	if (bSuccessful == false)
+	{
 		FNShared::Print("Unable to load character %i for SteamID %llu!\n", (m_iSlot + 1), m_iSteamID64);
+		return;
+	}
 
 	CBasePlayer* pPlayer = UTIL_PlayerBySteamID(m_iSteamID64);
 	if (pPlayer == nullptr)
@@ -29,7 +32,7 @@ void LoadCharacterRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc, i
 
 	charinfo_t& CharInfo = pPlayer->m_CharInfo[m_iSlot];
 
-	if (bSuccessful == false)
+	if (iRespCode == 204)
 	{
 		CharInfo.Index = m_iSlot;
 		CharInfo.Location = LOC_CENTRAL;
