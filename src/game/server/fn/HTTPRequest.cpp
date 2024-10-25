@@ -239,6 +239,7 @@ bool HTTPRequest::PerformRequest()
 		return false;
 
 	bool success = false;
+	curl_easy_setopt(m_Handle, CURLOPT_USERAGENT "MSR Game Server");
 	curl_easy_setopt(m_Handle, CURLOPT_WRITEFUNCTION, &HTTPRequest::WriteCallbackEvent);
 	CURLcode result = curl_easy_perform(m_Handle);
 	if (result == CURLE_OK)
