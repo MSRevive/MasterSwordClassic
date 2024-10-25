@@ -28,7 +28,7 @@ void CRequestManager::Think()
 			switch (req->m_iRequestState)
 			{
 			case HTTPRequest::RequestState::REQUEST_QUEUED:
-				req->SendRequest();
+				req->AsyncSendRequestDiscard();
 				break;
 
 			case HTTPRequest::RequestState::REQUEST_FINISHED:
