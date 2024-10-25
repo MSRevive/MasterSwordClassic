@@ -7,7 +7,7 @@
 
 #include <future>
 #include <rapidjson/fwd.h> // Rapid JSON Helpers from Infestus!
-#include <libcurl/curl.h>
+#include <curl/curl.h>
 #ifdef _WIN32
 #include <PlatformWin.h>
 #endif
