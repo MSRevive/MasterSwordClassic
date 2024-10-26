@@ -6,7 +6,7 @@
 #define FN_SHAREDDEFS_H
 
 #include "rapidjson/fwd.h"
-#include "steam/steamtypes.h"
+#include <Platform.h>
 
 class CBasePlayer;
 
@@ -30,7 +30,7 @@ namespace FNShared
 	bool IsAdmin(int flags);
 	void LoadCharacter(CBasePlayer* pPlayer);
 	void LoadCharacter(CBasePlayer* pPlayer, int slot);
-	void CreateOrUpdateCharacter(CBasePlayer* pPlayer, int slot, uint8* data, size_t size, bool bIsUpdate);
+	void CreateOrUpdateCharacter(CBasePlayer* pPlayer, int slot, byte* data, size_t size, bool bIsUpdate);
 	void DeleteCharacter(CBasePlayer* pPlayer, int slot);
 }
 

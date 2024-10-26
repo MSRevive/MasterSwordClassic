@@ -23,7 +23,7 @@
 
 static char g_szBaseUrl[REQUEST_URL_SIZE];
 
-HTTPRequest::HTTPRequest(HTTPMethod method, const char* url, uint8* body, size_t bodySize, ID64 steamID64, ID64 slot)
+HTTPRequest::HTTPRequest(HTTPMethod method, const char* url, byte* body, size_t bodySize, ID64 steamID64, ID64 slot)
 {
 	m_eHTTPMethod = method;
 	m_iRequestState = RequestState::REQUEST_QUEUED;
@@ -39,7 +39,7 @@ HTTPRequest::HTTPRequest(HTTPMethod method, const char* url, uint8* body, size_t
 	if ((body != nullptr) && (bodySize > 0))
 	{
 		m_iRequestBodySize = bodySize;
-		m_sRequestBody = new uint8[m_iRequestBodySize];
+		m_sRequestBody = new uint8[bodySize];
 		memcpy(m_sRequestBody, body, m_iRequestBodySize);
 	}
 
@@ -104,8 +104,9 @@ bool HTTPRequest::SendRequest()
 
 		writer.EndObject();
 
-		const std::string buffer = s.GetString();
-		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDS, buffer.c_str());
+		const char* buffer = s.GetString();
+		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDSIZE, strlen(buffer));
+		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDS, buffer);
 	}
 
 	return PerformRequest();
@@ -164,8 +165,9 @@ bool HTTPRequest::AsyncSendRequest()
 
 		writer.EndObject();
 
-		const std::string buffer = s.GetString();
-		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDS, buffer.c_str());
+		const char* buffer = s.GetString();
+		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDSIZE, strlen(buffer));
+		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDS, buffer);
 	}
 
 	m_ResponseFuture = std::async(std::launch::async, &HTTPRequest::PerformRequest, this);
@@ -225,8 +227,9 @@ void HTTPRequest::AsyncSendRequestDiscard()
 
 		writer.EndObject();
 
-		const std::string buffer = s.GetString();
-		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDS, buffer.c_str());
+		const char* buffer = s.GetString();
+		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDSIZE, strlen(buffer));
+		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDS, buffer);
 	}
 
 	// we use a lambda here because we don't care about the result
@@ -307,7 +310,7 @@ void HTTPRequest::ResponseCallback(int httpCode)
 		m_iRequestState = RequestState::REQUEST_FINISHED;
 		return;
 	}
-	
+
 	JSONDocument* jsonDoc = ParseJSON(m_sResponseBody.c_str());
 	OnResponse(true, jsonDoc);
 	delete jsonDoc;

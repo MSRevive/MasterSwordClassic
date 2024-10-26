@@ -122,7 +122,7 @@ void FNShared::LoadCharacter(CBasePlayer* pPlayer, int slot)
 }
 
 // Create or Update FN character!
-void FNShared::CreateOrUpdateCharacter(CBasePlayer* pPlayer, int slot, uint8* data, size_t size, bool bIsUpdate)
+void FNShared::CreateOrUpdateCharacter(CBasePlayer* pPlayer, int slot, byte* data, size_t size, bool bIsUpdate)
 {
 	if ((pPlayer == NULL) || (pPlayer->steamID64 == 0ULL) || (data == NULL) || (size <= 0) || !IsSlotValid(slot))
 		return; // Quick validation - steamId is vital.

@@ -9,7 +9,7 @@
 #include "player.h"
 #include "util.h"
 
-UpdateCharacterRequest::UpdateCharacterRequest(ID64 steamID, ID64 slot, const char* url, uint8* body, size_t bodySize) :
+UpdateCharacterRequest::UpdateCharacterRequest(ID64 steamID, ID64 slot, const char* url, byte* body, size_t bodySize) :
 	HTTPRequest(HTTPMethod::PUT, url, body, bodySize, steamID, slot)
 {
 }

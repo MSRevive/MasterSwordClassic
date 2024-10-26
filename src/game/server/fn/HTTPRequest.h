@@ -16,7 +16,7 @@
 #define REQUEST_URL_SIZE 512
 #define HTTP_CONTENT_TYPE "application/json"
 #define ID64 unsigned long long
-using uint8 = unsigned char;
+//using uint8 = unsigned char; // Same thing as byte
 
 class HTTPRequest
 {
@@ -28,7 +28,7 @@ public:
 		PUT
 	};
 
-	HTTPRequest(HTTPMethod method, const char* url, uint8* body = nullptr, size_t bodySize = 0, ID64 steamID64 = 0ULL, ID64 slot = 0ULL);
+	HTTPRequest(HTTPMethod method, const char* url, byte* body = nullptr, size_t bodySize = 0, ID64 steamID64 = 0ULL, ID64 slot = 0ULL);
 	virtual ~HTTPRequest();
 
 	virtual const char* GetName() { return "N/A"; }
@@ -54,7 +54,7 @@ public:
 protected: // Expose data to inheriting classes.
 	char m_sPchAPIUrl[REQUEST_URL_SIZE];
 
-	uint8* m_sRequestBody;
+	byte* m_sRequestBody;
 	size_t m_iRequestBodySize;
 
 	std::string m_sResponseBody;
