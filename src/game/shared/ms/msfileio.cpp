@@ -80,8 +80,10 @@ size_t CGameFile::GetFileSize()
 
 CMemFile::CMemFile()
 {
-	m_BufferSize = m_ReadOffset = m_WriteOffset = 0;
-	m_Buffer = NULL;
+	m_BufferSize = 0;
+	m_ReadOffset = 0;
+	m_WriteOffset = 0;
+	m_Buffer = nullptr;
 }
 
 CMemFile::CMemFile(int Alloc) : CMemFile()
@@ -110,7 +112,7 @@ void CMemFile::Alloc(int Alloc)
 void CMemFile::Dealloc()
 {
 	delete[] m_Buffer;
-	m_Buffer = NULL;
+	m_Buffer = nullptr;
 	m_BufferSize = 0;
 }
 
