@@ -52,7 +52,7 @@ void LoadCharacterRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc, i
 	}
 
 	m_iRequestBodySize = doc["data"]["size"].GetInt();
-	m_sRequestBody = new uint8[m_iRequestBodySize];
+	m_sRequestBody = new char[m_iRequestBodySize];
 	memcpy(m_sRequestBody, (char*)base64_decode(doc["data"]["data"].GetString()).c_str(), m_iRequestBodySize);
 
 	CharInfo.AssignChar(m_iSlot, LOC_CENTRAL, (char*)m_sRequestBody, m_iRequestBodySize, pPlayer);

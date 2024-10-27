@@ -30,7 +30,7 @@ namespace FNShared
 	bool IsAdmin(int flags);
 	void LoadCharacter(CBasePlayer* pPlayer);
 	void LoadCharacter(CBasePlayer* pPlayer, int slot);
-	void CreateOrUpdateCharacter(CBasePlayer* pPlayer, int slot, byte* data, size_t size, bool bIsUpdate);
+	void CreateOrUpdateCharacter(CBasePlayer* pPlayer, int slot, const char* data, size_t size, bool bIsUpdate);
 	void DeleteCharacter(CBasePlayer* pPlayer, int slot);
 }
 

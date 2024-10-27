@@ -22,13 +22,13 @@ class HTTPRequest
 {
 public:
 	enum HTTPMethod {
-		GET,
+		GET = 0,
 		POST,
 		DEL, //DELETE is reserved by windows.
 		PUT
 	};
 
-	HTTPRequest(HTTPMethod method, const char* url, byte* body = nullptr, size_t bodySize = 0, ID64 steamID64 = 0ULL, ID64 slot = 0ULL);
+	HTTPRequest(HTTPMethod method, const char* url, const char* body = nullptr, size_t bodySize = 0, ID64 steamID64 = 0ULL, ID64 slot = 0ULL);
 	virtual ~HTTPRequest();
 
 	virtual const char* GetName() { return "N/A"; }
@@ -54,7 +54,7 @@ public:
 protected: // Expose data to inheriting classes.
 	char m_sPchAPIUrl[REQUEST_URL_SIZE];
 
-	byte* m_sRequestBody;
+	char* m_sRequestBody;
 	size_t m_iRequestBodySize;
 
 	std::string m_sResponseBody;
@@ -71,6 +71,7 @@ private: // Keep this private.
 	static JSONDocument* ParseJSON(const char* data, size_t length = 0);
 	void Cleanup();
 
+	void SetupRequest();
 	bool PerformRequest();
 
 	HTTPMethod m_eHTTPMethod;

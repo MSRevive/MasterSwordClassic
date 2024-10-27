@@ -10,7 +10,7 @@
 class UpdateCharacterRequest : public HTTPRequest
 {
 public:
-	UpdateCharacterRequest(ID64 steamID, ID64 slot, const char* url, byte* body, size_t bodySize);
+	UpdateCharacterRequest(ID64 steamID, ID64 slot, const char* url, const char* body, size_t bodySize);
 	void OnResponse(bool bSuccessful, JSONDocument* jsonDoc, int iRespCode);
 	const char* GetName() { return "UpdateCharacterRequest"; }
 
