@@ -51,6 +51,20 @@ HTTPRequest::~HTTPRequest()
 	Cleanup();
 }
 
+void HTTPRequest::Cleanup()
+{
+	delete m_sRequestBody;
+	m_sRequestBuffer.clear();
+	m_sResponseBody.clear();
+
+	// just incase it's not cleanuped already.
+	if (m_Handle)
+	{
+		curl_easy_cleanup(m_Handle);
+		m_Handle = nullptr;
+	}
+}
+
 void HTTPRequest::SetupRequest()
 {
 	// might be better to use assert here instead.
@@ -80,6 +94,10 @@ void HTTPRequest::SetupRequest()
 	// Process request body.
 	if (m_sRequestBody != nullptr)
 	{
+		struct curl_slist *list = nullptr;
+		list = curl_slist_append(list, "Content-Type: application/json; charset=UTF-8");
+		curl_easy_setopt(m_Handle, CURLOPT_HTTPHEADER, list);
+
 		char steamID64String[REQUEST_URL_SIZE];
 		_snprintf(steamID64String, REQUEST_URL_SIZE, "%llu", m_iSteamID64);
 
@@ -98,13 +116,14 @@ void HTTPRequest::SetupRequest()
 		writer.Int(m_iRequestBodySize);
 
 		writer.Key("data");
-		writer.String(base64_encode((byte*)m_sRequestBody, m_iRequestBodySize).c_str());
+		writer.String(base64_encode(reinterpret_cast<byte*>(m_sRequestBody), m_iRequestBodySize).c_str());
 
 		writer.EndObject();
 
-		const char* buffer = s.GetString();
-		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDSIZE, strlen(buffer));
-		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDS, buffer);
+		std::string buffer = s.GetString();
+		m_sRequestBuffer = buffer;
+		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDSIZE, m_sRequestBuffer.size());
+		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDS, m_sRequestBuffer.c_str());
 	}
 }
 
@@ -246,19 +265,6 @@ JSONDocument* HTTPRequest::ParseJSON(const char* data, size_t length)
 	}
 
 	return document;
-}
-
-void HTTPRequest::Cleanup()
-{
-	delete m_sRequestBody;
-	m_sResponseBody.clear();
-
-	// just incase it's not cleanuped already.
-	if (m_Handle)
-	{
-		curl_easy_cleanup(m_Handle);
-		m_Handle = nullptr;
-	}
 }
 
 /*

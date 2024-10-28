@@ -57,6 +57,8 @@ protected: // Expose data to inheriting classes.
 	char* m_sRequestBody;
 	size_t m_iRequestBodySize;
 
+	std::string m_sRequestBuffer;
+
 	std::string m_sResponseBody;
 	size_t m_iResponseBodySize;
 
