@@ -10,7 +10,7 @@ public:
 	CRequestManager() = default;
 	~CRequestManager() = default;
 	void Init();
-	void Think();
+	void Think(bool skipCallback = false);
 	void Shutdown(void);
 
 	void Clear(void) { m_vRequests.clear(); }

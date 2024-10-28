@@ -41,6 +41,7 @@ public:
 	void AsyncSendRequestDiscard();
 
 	int m_iRequestState;
+	bool m_bSkipCallback = false;
 
 	enum RequestState
 	{

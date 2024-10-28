@@ -17,13 +17,14 @@ void CRequestManager::Init()
 	}
 }
 
-void CRequestManager::Think()
+void CRequestManager::Think(bool skipCallback)
 {
 	if (m_bLoaded)
 	{
 		for (int i = (m_vRequests.size() - 1); i >= 0; i--)
 		{
 			HTTPRequest* req = m_vRequests[i];
+			req->m_bSkipCallback = skipCallback;
 			
 			switch (req->m_iRequestState)
 			{
@@ -40,10 +41,17 @@ void CRequestManager::Think()
 	}
 }
 
+extern void wait(unsigned long ms);
 void CRequestManager::Shutdown(void)
 {
+	if (!m_bLoaded)
+		return;
+
 	// we run think here to finish up the requests to prevent dataloss.
-	Think();
+	do {
+		Think(true);
+		wait(10);
+	}while(m_vRequests.size());
 
 	m_vRequests.clear();
 	m_bLoaded = false;
@@ -51,5 +59,8 @@ void CRequestManager::Shutdown(void)
 
 void CRequestManager::QueueRequest(HTTPRequest* req)
 {
+	if (!m_bLoaded)
+		return;
+	
 	m_vRequests.push_back(req);
 }

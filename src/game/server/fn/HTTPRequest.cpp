@@ -121,7 +121,7 @@ void HTTPRequest::SetupRequest()
 		writer.EndObject();
 
 		std::string buffer = s.GetString();
-		m_sRequestBuffer = buffer;
+		m_sRequestBuffer = buffer; //we have to make a copy of the data because it will go out of scope otherwise.
 		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDSIZE, m_sRequestBuffer.size());
 		curl_easy_setopt(m_Handle, CURLOPT_POSTFIELDS, m_sRequestBuffer.c_str());
 	}
@@ -204,6 +204,9 @@ size_t HTTPRequest::WriteCallback(void* ptr, size_t size, size_t nmemb)
 
 void HTTPRequest::ResponseCallback(int httpCode)
 {
+	if (m_bSkipCallback)
+		return;
+	
 	if (httpCode == 0)
 	{
 		FNShared::Print("Request Failed. %s, '%s'\n", GetName(), g_szBaseUrl);
