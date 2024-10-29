@@ -205,7 +205,10 @@ size_t HTTPRequest::WriteCallback(void* ptr, size_t size, size_t nmemb)
 void HTTPRequest::ResponseCallback(int httpCode)
 {
 	if (m_bSkipCallback)
+	{
+		m_iRequestState = RequestState::REQUEST_FINISHED;
 		return;
+	}
 	
 	if (httpCode == 0)
 	{
@@ -269,66 +272,6 @@ JSONDocument* HTTPRequest::ParseJSON(const char* data, size_t length)
 
 	return document;
 }
-
-/*
-void HTTPRequest::OnHTTPRequestCompleted(HTTPRequestCompleted_t* p, bool bError)
-{
-	if (suppressResponse || (handle == NULL) || (p == nullptr) || (p->m_hRequest != handle))
-	{
-		ReleaseHandle();
-		return;
-	}
-
-	if (bError || p->m_eStatusCode < 200 || p->m_eStatusCode > 299)
-	{
-		if (p->m_eStatusCode == 401)
-		{
-			FNShared::Print("FN Authorization failed! %s\n", GetName());
-			ReleaseHandle();
-			return;
-		}
-
-		if (!p->m_bRequestSuccessful)
-		{
-			FNShared::Print("The data hasn't been received. No response from the server. %s, '%s'\n", GetName(), g_szBaseUrl);
-			OnResponse(false, p->m_eStatusCode);
-			ReleaseHandle();
-			return;
-		}
-
-		FNShared::Print("FN Server Error. %s Code: %d\n", GetName(), p->m_eStatusCode);
-		ReleaseHandle();
-		return;
-	}
-
-	size_t unBytes = 0;
-	if ((responseBody == nullptr) && g_SteamHTTPContext->GetHTTPResponseBodySize(handle, &unBytes))
-	{
-		// it should've never gotten to this point but okay.
-		if (p->m_eStatusCode == 204)
-		{
-			OnResponse(true, p->m_eStatusCode);
-			ReleaseHandle();
-			return;
-		}
-
-		if (unBytes <= 0)
-		{
-			FNShared::Print("The data hasn't been received. HTTP code: %d\n", p->m_eStatusCode);
-			ReleaseHandle();
-			return;
-		}
-
-		responseBodySize = unBytes;
-		responseBody = new uint8[responseBodySize];
-
-		if (g_SteamHTTPContext->GetHTTPResponseBodyData(handle, responseBody, unBytes))
-			pJSONData = ParseJSON(reinterpret_cast<char*>(responseBody), responseBodySize);
-	}
-
-	OnResponse(true, p->m_eStatusCode);
-	ReleaseHandle();
-}*/
 
 /* static */ void HTTPRequest::SetBaseURL(const char* url)
 {
