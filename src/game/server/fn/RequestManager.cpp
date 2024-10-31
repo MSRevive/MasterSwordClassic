@@ -51,7 +51,7 @@ void CRequestManager::Shutdown(void)
 	do {
 		Think(true);
 		wait(10);
-	}while(m_vRequests.size());
+	}while(m_vRequests.size() != 0);
 
 	m_vRequests.clear();
 	m_bLoaded = false;

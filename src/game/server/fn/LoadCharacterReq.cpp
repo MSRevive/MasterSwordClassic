@@ -15,7 +15,7 @@ LoadCharacterRequest::LoadCharacterRequest(ID64 steamID, ID64 slot, const char* 
 {
 }
 
-void LoadCharacterRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc, int iRespCode)
+void LoadCharacterRequest::OnResponse(bool bSuccessful, int iRespCode)
 {
 	if (bSuccessful == false)
 	{
@@ -41,7 +41,7 @@ void LoadCharacterRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc, i
 		return;
 	}
 
-	JSONDocument& doc = (*jsonDoc);
+	JSONDocument& doc = (*m_JSONResponse);
 	const int flags = doc["data"]["flags"].GetInt();
 
 	if (FNShared::IsBanned(flags) == true)
@@ -53,9 +53,9 @@ void LoadCharacterRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc, i
 
 	m_iRequestBodySize = doc["data"]["size"].GetInt();
 	m_sRequestBody = new char[m_iRequestBodySize];
-	memcpy(m_sRequestBody, (char*)base64_decode(doc["data"]["data"].GetString()).c_str(), m_iRequestBodySize);
+	memcpy(m_sRequestBody, base64_decode(doc["data"]["data"].GetString()).c_str(), m_iRequestBodySize);
 
-	CharInfo.AssignChar(m_iSlot, LOC_CENTRAL, (char*)m_sRequestBody, m_iRequestBodySize, pPlayer);
+	CharInfo.AssignChar(m_iSlot, LOC_CENTRAL, m_sRequestBody, m_iRequestBodySize, pPlayer);
 	strncpy(CharInfo.Guid, doc["data"]["id"].GetString(), MSSTRING_SIZE);
 	CharInfo.Flags = flags;
 	CharInfo.Status = CDS_LOADED;

@@ -14,10 +14,13 @@ DeleteCharacterRequest::DeleteCharacterRequest(ID64 steamID, ID64 slot, const ch
 {
 }
 
-void DeleteCharacterRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc, int iRespCode)
+void DeleteCharacterRequest::OnResponse(bool bSuccessful, int iRespCode)
 {
 	if (bSuccessful == false)
+	{
 		FNShared::Print("Unable to delete character for SteamID %llu!\n", m_iSteamID64);
+		return;
+	}
 
 	CBasePlayer* pPlayer = UTIL_PlayerBySteamID(m_iSteamID64);
 	if (pPlayer == NULL)

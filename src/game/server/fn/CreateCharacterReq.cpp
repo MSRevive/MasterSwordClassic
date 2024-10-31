@@ -14,7 +14,7 @@ CreateCharacterRequest::CreateCharacterRequest(ID64 steamID, ID64 slot, const ch
 {
 }
 
-void CreateCharacterRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc, int iRespCode)
+void CreateCharacterRequest::OnResponse(bool bSuccessful, int iRespCode)
 {
 	if (bSuccessful == false)
 		FNShared::Print("Unable to create character for SteamID %llu!\n", m_iSteamID64);
@@ -34,7 +34,7 @@ void CreateCharacterRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc,
 		return;
 	}
 	
-	JSONDocument& doc = (*jsonDoc);
+	JSONDocument& doc = (*m_JSONResponse);
 	const int flags = doc["data"]["flags"].GetInt();
 
 	CharInfo.AssignChar(m_iSlot, LOC_CENTRAL, (char*)m_sRequestBody, m_iRequestBodySize, pPlayer);

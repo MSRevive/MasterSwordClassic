@@ -13,7 +13,7 @@ ValidateMapRequest::ValidateMapRequest(const char* url) :
 {
 }
 
-void ValidateMapRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc, int iRespCode)
+void ValidateMapRequest::OnResponse(bool bSuccessful, int iRespCode)
 {
 	if (bSuccessful == false)
 	{
@@ -22,7 +22,7 @@ void ValidateMapRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc, int
 		return;
 	}
 
-	JSONDocument& doc = (*jsonDoc);
+	JSONDocument& doc = (*m_JSONResponse);
 	if (!doc["data"].GetBool())
 	{
 		FNShared::Print("Map '%s' is not verified for FN!\n", MSGlobals::MapName.c_str());

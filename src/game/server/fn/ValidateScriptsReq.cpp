@@ -13,7 +13,7 @@ ValidateScriptsRequest::ValidateScriptsRequest(const char* url) :
 {
 }
 
-void ValidateScriptsRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc, int iRespCode)
+void ValidateScriptsRequest::OnResponse(bool bSuccessful, int iRespCode)
 {
 	if (bSuccessful == false)
 	{
@@ -22,7 +22,7 @@ void ValidateScriptsRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc,
 		return;
 	}
 
-	JSONDocument& doc = (*jsonDoc);
+	JSONDocument& doc = (*m_JSONResponse);
 	if (!doc["data"].GetBool())
 	{
 		FNShared::Print("Script file not verified for FN!\n");

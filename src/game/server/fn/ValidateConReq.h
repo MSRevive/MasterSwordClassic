@@ -11,7 +11,7 @@ class ValidateConnectivityRequest : public HTTPRequest
 {
 public:
 	ValidateConnectivityRequest(const char* url);
-	void OnResponse(bool bSuccessful, JSONDocument* jsonDoc, int iRespCode);
+	void OnResponse(bool bSuccessful, int iRespCode);
 	const char* GetName() { return "ValidateConnectivityRequest"; }
 
 private:

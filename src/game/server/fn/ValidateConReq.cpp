@@ -13,7 +13,7 @@ ValidateConnectivityRequest::ValidateConnectivityRequest(const char* url) :
 {
 }
 
-void ValidateConnectivityRequest::OnResponse(bool bSuccessful, JSONDocument* jsonDoc, int iRespCode)
+void ValidateConnectivityRequest::OnResponse(bool bSuccessful, int iRespCode)
 {
 	if (bSuccessful == false)
 	{
@@ -22,7 +22,7 @@ void ValidateConnectivityRequest::OnResponse(bool bSuccessful, JSONDocument* jso
 		return;
 	}
 
-	JSONDocument& doc = (*jsonDoc);
+	JSONDocument& doc = (*m_JSONResponse);
 	if (!doc["data"].GetBool())
 	{
 		FNShared::Print("FuzzNet connection failed!\n");

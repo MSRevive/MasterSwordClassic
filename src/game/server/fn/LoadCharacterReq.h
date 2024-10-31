@@ -11,7 +11,7 @@ class LoadCharacterRequest : public HTTPRequest
 {
 public:
 	LoadCharacterRequest(ID64 steamID, ID64 slot, const char* url);
-	void OnResponse(bool bSuccessful, JSONDocument* jsonDoc, int iRespCode);
+	void OnResponse(bool bSuccessful, int iRespCode);
 	const char* GetName() { return "LoadCharacterRequest"; }
 
 private:

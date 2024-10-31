@@ -11,7 +11,7 @@ class ValidateScriptsRequest : public HTTPRequest
 {
 public:
 	ValidateScriptsRequest(const char* url);
-	void OnResponse(bool bSuccessful, JSONDocument* jsonDoc, int iRespCode);
+	void OnResponse(bool bSuccessful, int iRespCode);
 	const char* GetName() { return "ValidateScriptsRequest"; }
 
 private:
