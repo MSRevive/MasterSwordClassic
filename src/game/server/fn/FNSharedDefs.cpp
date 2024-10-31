@@ -63,14 +63,19 @@ void FNShared::Validate(void)
 	g_FNRequestManager.QueueRequest(new ValidateMapRequest(UTIL_VarArgs("/api/v2/internal/map/%s/%u", MSGlobals::MapName.c_str(), mapFileHash)));
 }
 
-void FNShared::ValidateFN(void)
+bool FNShared::ValidateFN(void)
 {
 	if (IsEnabled() == false)
-		return;
+		return false;
 	
-	HTTPRequest* request = new ValidateConnectivityRequest("/api/v2/internal/ping");
-	g_FNRequestManager.QueueRequest(request);
-	//request->SendRequest();
+	std::unique_ptr<HTTPRequest> pReq(new ValidateConnectivityRequest("/api/v2/internal/ping"));
+	if (pReq.get()->AsyncSendRequest())
+	{
+		JSONDocument& doc = (*pReq.get()->m_JSONResponse);
+		return doc["data"].GetBool();
+	}
+
+	return false;
 }
 
 // Check if player has BANNED flag.

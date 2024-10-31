@@ -24,7 +24,7 @@ namespace FNShared
 	bool IsSlotValid(int slot);
 	bool IsEnabled(void);
 	void Validate(void);
-	void ValidateFN(void);
+	bool ValidateFN(void);
 	bool IsBanned(int flags);
 	bool IsDonor(int flags);
 	bool IsAdmin(int flags);
