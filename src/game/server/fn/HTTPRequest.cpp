@@ -54,9 +54,13 @@ HTTPRequest::~HTTPRequest()
 void HTTPRequest::Cleanup()
 {
 	delete m_sRequestBody;
+	m_sRequestBody = nullptr;
 	m_sRequestBuffer.clear();
-	m_sResponseBody.clear();
 
+	delete m_JSONResponse;
+	m_JSONResponse = nullptr;
+	m_sResponseBody.clear();
+	
 	// just incase it's not cleanuped already.
 	if (m_Handle)
 	{
@@ -127,6 +131,7 @@ void HTTPRequest::SetupRequest()
 	}
 }
 
+// This is a blocking call.
 bool HTTPRequest::SendRequest()
 {
 	if (m_Handle) 
@@ -139,6 +144,8 @@ bool HTTPRequest::SendRequest()
 	return PerformRequest();
 }
 
+// This will pause the main thread until the async thread finishes it's task.
+// This will return true/false if the async thread completed it's task sucessfully.
 bool HTTPRequest::AsyncSendRequest()
 {
 	if (m_Handle)
@@ -152,6 +159,7 @@ bool HTTPRequest::AsyncSendRequest()
 	return m_Promise.get_future().get();
 }
 
+// This ignores the result of the async thread.
 void HTTPRequest::AsyncSendRequestDiscard()
 {
 	if (m_Handle)
@@ -233,7 +241,7 @@ void HTTPRequest::ResponseCallback(int httpCode)
 
 	if (httpCode == 204)
 	{
-		OnResponse(true, nullptr, httpCode);
+		OnResponse(true, httpCode);
 		m_iRequestState = RequestState::REQUEST_FINISHED;
 		return;
 	}
@@ -241,14 +249,17 @@ void HTTPRequest::ResponseCallback(int httpCode)
 	if (m_sResponseBody.empty())
 	{
 		FNShared::Print("The data hasn't been received. HTTP code: %d\n", httpCode);
-		OnResponse(true, nullptr, httpCode);
+		OnResponse(true, httpCode);
 		m_iRequestState = RequestState::REQUEST_FINISHED;
 		return;
 	}
 
-	JSONDocument* jsonDoc = ParseJSON(m_sResponseBody.c_str());
-	OnResponse(true, jsonDoc);
-	delete jsonDoc;
+	JSONDocument* m_JSONResponse = ParseJSON(m_sResponseBody.c_str());
+	if (m_JSONResponse)
+		OnResponse(true);
+	else
+		OnResponse(false);
+	
 	m_iRequestState = RequestState::REQUEST_FINISHED;
 }
 

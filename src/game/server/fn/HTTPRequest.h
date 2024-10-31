@@ -32,7 +32,7 @@ public:
 	virtual ~HTTPRequest();
 
 	virtual const char* GetName() { return "N/A"; }
-	virtual void OnResponse(bool bSuccessful, JSONDocument* jsonDoc, int iRespCode = 200) { }
+	virtual void OnResponse(bool bSuccessful, int iRespCode = 200) { }
 
 	static void SetBaseURL(const char* url);
 
@@ -42,6 +42,7 @@ public:
 
 	int m_iRequestState;
 	bool m_bSkipCallback = false;
+	JSONDocument* m_JSONResponse;
 
 	enum RequestState
 	{
@@ -57,11 +58,9 @@ protected: // Expose data to inheriting classes.
 
 	char* m_sRequestBody;
 	size_t m_iRequestBodySize;
-
 	std::string m_sRequestBuffer;
 
 	std::string m_sResponseBody;
-	size_t m_iResponseBodySize;
 
 	ID64 m_iSteamID64;
 	ID64 m_iSlot;
