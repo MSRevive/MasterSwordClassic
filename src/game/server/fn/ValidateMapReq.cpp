@@ -26,8 +26,6 @@ void ValidateMapRequest::OnResponse(bool bSuccessful, int iRespCode)
 	if (!doc["data"].GetBool())
 	{
 		FNShared::Print("Map '%s' is not verified for FN!\n", MSGlobals::MapName.c_str());
-		SERVER_COMMAND("map edana");
-		MSGlobals::CentralEnabled = false;
 	}
 
 	FNShared::Print("Map '%s' verified for FN.\n", MSGlobals::MapName.c_str());

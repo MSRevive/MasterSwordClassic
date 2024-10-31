@@ -23,8 +23,11 @@ namespace FNShared
 	void Print(const char* fmt, ...);
 	bool IsSlotValid(int slot);
 	bool IsEnabled(void);
-	void Validate(void);
+	bool Validate(void);
+	bool ValidateMap(void);
+	bool ValidateSC(void);
 	bool ValidateFN(void);
+	
 	bool IsBanned(int flags);
 	bool IsDonor(int flags);
 	bool IsAdmin(int flags);

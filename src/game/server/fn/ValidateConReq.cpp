@@ -8,27 +8,12 @@
 #include "msdllheaders.h"
 #include "global.h"
 
-ValidateConnectivityRequest::ValidateConnectivityRequest(const char* url) :
+ValidateConRequest::ValidateConRequest(const char* url) :
 	HTTPRequest(HTTPMethod::GET, url)
 {
 }
 
-void ValidateConnectivityRequest::OnResponse(bool bSuccessful, int iRespCode)
+void ValidateConRequest::OnResponse(bool bSuccessful, int iRespCode)
 {
-	if (bSuccessful == false)
-	{
-		FNShared::Print("FuzzNet has been disabled!\n");
-		MSGlobals::CentralEnabled = false;
-		return;
-	}
-
-	JSONDocument& doc = (*m_JSONResponse);
-	if (!doc["data"].GetBool())
-	{
-		FNShared::Print("FuzzNet connection failed!\n");
-		MSGlobals::CentralEnabled = false;
-		return;
-	}
-
-	FNShared::Print("FuzzNet connected!\n");
+	return;
 }

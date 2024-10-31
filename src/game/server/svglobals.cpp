@@ -202,7 +202,40 @@ void MSWorldSpawn()
 	{	
 		g_engfuncs.pfnServerPrint("\nInitalize FN Request Manager\n");
 		g_FNRequestManager.Init();
-		//FNShared::ValidateFN();
+		
+		// here we try to connect to FN and retry 5 times if it fails.
+		bool fail = true;
+		for (int retry = 0; retry < 5; retry++)
+		{
+			if (FNShared::ValidateFN())
+			{
+				fail = false;
+				g_engfuncs.pfnServerPrint("FuzzNet connected!\n");
+				logfile << Logger::LOG_INFO << "FuzzNet connected\n";
+				break;
+			}
+			else if (retry != 5)
+			{
+				g_engfuncs.pfnServerPrint("FuzzNet connection failed! Retrying...\n");
+			}
+		}
+
+		if (fail == true)
+		{
+			g_engfuncs.pfnServerPrint("FuzzNet connection failed. Turning off FN.\n");
+			logfile << Logger::LOG_INFO << "FuzzNet connection failed.\n";
+			MSGlobals::CentralEnabled = false;
+		}
+	}
+
+	if (!FNShared::ValidateSC())
+	{
+		MSGlobals::CentralEnabled = false;
+	}
+
+	if (!FNShared::ValidateMap())
+	{
+		SERVER_COMMAND("map edana");
 	}
 
 	WriteCrashCfg();
@@ -214,16 +247,11 @@ void MSGameThink()
 	//g_SteamServerHelper->Think();
 	g_FNRequestManager.Think();
 
-	if(!gFNInitialized && FNShared::IsEnabled())
-	{
-		MSConnectFN();
-		gFNInitialized = true;
-	}
-}
-
-void MSConnectFN()
-{
-	FNShared::Validate();
+	// if(!gFNInitialized && FNShared::IsEnabled())
+	// {
+	// 	MSConnectFN();
+	// 	gFNInitialized = true;
+	// }
 }
 
 //Called when the map changes or server is shutdown from ServerDeactivate

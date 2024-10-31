@@ -26,7 +26,6 @@ void ValidateScriptsRequest::OnResponse(bool bSuccessful, int iRespCode)
 	if (!doc["data"].GetBool())
 	{
 		FNShared::Print("Script file not verified for FN!\n");
-		MSGlobals::CentralEnabled = false;
 	}
 
 	FNShared::Print("Scripts verified for FN.\n");

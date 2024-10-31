@@ -46,29 +46,61 @@ bool FNShared::IsEnabled(void)
 }
 
 // Send validation requests to the FN backend.
-void FNShared::Validate(void)
+bool FNShared::Validate(void)
 {
 	if (IsEnabled() == false)
-		return;
+		return false;
 
-	char scFile[MAX_PATH];
-	_snprintf(scFile, sizeof(scFile), "%s/dlls/sc.dll", MSGlobals::AbsGamePath.c_str());
-	unsigned int scFileHash = GetFileCheckSum(scFile);
+	if (ValidateMap() && ValidateSC())
+		return true;
 
-	char mapFile[MAX_PATH];
-	_snprintf(mapFile, sizeof(mapFile), "%s/maps/%s.bsp", MSGlobals::AbsGamePath.c_str(), MSGlobals::MapName.c_str());
-	unsigned int mapFileHash = GetFileCheckSum(mapFile);
-
-	g_FNRequestManager.QueueRequest(new ValidateScriptsRequest(UTIL_VarArgs("/api/v2/internal/sc/%u", scFileHash)));
-	g_FNRequestManager.QueueRequest(new ValidateMapRequest(UTIL_VarArgs("/api/v2/internal/map/%s/%u", MSGlobals::MapName.c_str(), mapFileHash)));
+	return false;
 }
 
 bool FNShared::ValidateFN(void)
 {
 	if (IsEnabled() == false)
-		return false;
+		return true;
 	
-	std::unique_ptr<HTTPRequest> pReq(new ValidateConnectivityRequest("/api/v2/internal/ping"));
+	std::unique_ptr<HTTPRequest> pReq(new ValidateConRequest("/api/v2/internal/ping"));
+	if (pReq.get()->AsyncSendRequest())
+	{
+		JSONDocument& doc = (*pReq.get()->m_JSONResponse);
+		return doc["data"].GetBool();
+	}
+
+	return false;
+}
+
+bool FNShared::ValidateMap(void)
+{
+	if (IsEnabled() == false)
+		return true;
+	
+	char mapFile[MAX_PATH];
+	_snprintf(mapFile, sizeof(mapFile), "%s/maps/%s.bsp", MSGlobals::AbsGamePath.c_str(), MSGlobals::MapName.c_str());
+	unsigned int mapFileHash = GetFileCheckSum(mapFile);
+
+	std::unique_ptr<HTTPRequest> pReq(new ValidateMapRequest(UTIL_VarArgs("/api/v2/internal/map/%s/%u", MSGlobals::MapName.c_str(), mapFileHash)));
+	if (pReq.get()->AsyncSendRequest())
+	{
+		JSONDocument& doc = (*pReq.get()->m_JSONResponse);
+		return doc["data"].GetBool();
+	}
+
+	return false;
+}
+
+bool FNShared::ValidateSC(void)
+{
+	if (IsEnabled() == false)
+		return true;
+
+	char scFile[MAX_PATH];
+	_snprintf(scFile, sizeof(scFile), "%s/dlls/sc.dll", MSGlobals::AbsGamePath.c_str());
+	unsigned int scFileHash = GetFileCheckSum(scFile);
+
+	std::unique_ptr<HTTPRequest> pReq(new ValidateScriptsRequest(UTIL_VarArgs("/api/v2/internal/sc/%u", scFileHash)));
 	if (pReq.get()->AsyncSendRequest())
 	{
 		JSONDocument& doc = (*pReq.get()->m_JSONResponse);
