@@ -77,15 +77,15 @@ function(set_common_properties TARGET_NAME)
 			# Note: the pentium-m arch setting is not used for AMD systems in the original makefile
 			# Since the arch settings used are i686 this means including the setting ensures original settings are used,
 			# but it could cause problems for AMD targets
-			$<$<CXX_COMPILER_ID:GNU>:-fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -march=pentium-m -mfpmath=387>
-			
+			$<$<CXX_COMPILER_ID:GNU>:-fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -Wno-write-strings -Wno-pointer-arith -march=pentium-m -mfpmath=387>
+
 			# flifetime-dse=1 is needed to disable a compiler optimization that optimizes out std::memset calls in CBaseEntity::operator new
 			# See https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-flifetime-dse for more information about this flag
 			# fno-gnu-unique is needed to disable a compiler optimization that prevents dlclose from unloading mod dlls,
 			# causing them to retain state and crash when the engine tries to access memory in an invalid way
 			# See https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-fno-gnu-unique for more information about this flag
-			$<$<CXX_COMPILER_ID:GNU>:-flifetime-dse=1 -fno-gnu-unique>
-			
+			$<$<CXX_COMPILER_ID:GNU>:-fno-lifetime-dse -fno-gnu-unique>
+
 			# Can't set warning level to W4 until the compiler can deal with std::visit containing static_assert, which currently causes false positive "Unreachable code" warnings
 			$<$<CXX_COMPILER_ID:MSVC>:/W3 /MP>)
 
@@ -109,6 +109,7 @@ function(set_common_properties TARGET_NAME)
 	endif()
 
 	target_link_options(${TARGET_NAME} PRIVATE
+		$<$<CXX_COMPILER_ID:GNU>:-Wl,--no-undefined>
 		$<$<PLATFORM_ID:Linux>:-static-libstdc++ -Wl,-Map,${TARGET_NAME}_map.txt>)
 endfunction(set_common_properties)
 
