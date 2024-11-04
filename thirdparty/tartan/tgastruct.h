@@ -6,13 +6,15 @@
 
 #ifdef _WIN32
 #include <windows.h> // Standard windows header
+#else
+typedef unsigned char byte;
 #endif
 #include <stdio.h> // Standard I/O header
 #include <GL/gl.h> // Header for OpenGL32 library
 
 #include "texturestruct.h"
-#include <pshpack1.h>
 
+#pragma pack(push, 1)
 namespace Tartan
 {
 
@@ -57,7 +59,6 @@ namespace Tartan
     bool LoadCompressedTGA(Texture *);                               //!< Load a Compressed file
 
 } // namespace Tartan
-
-#include <poppack.h>
+#pragma pack(pop)
 
 #endif
