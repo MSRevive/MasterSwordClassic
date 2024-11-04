@@ -117,12 +117,8 @@ add_compile_definitions($<$<CONFIG:Debug>:DEBUG> $<$<CONFIG:Debug>:_DEBUG>)
 add_compile_definitions($<$<CONFIG:Release>:NDEBUG>)
 
 # Add Projects
-if (WIN32)
-	add_subdirectory(src/game/client)
-	add_subdirectory(src/game/server)
-else()
-	add_subdirectory(src/game/server)
-endif()
+add_subdirectory(src/game/client)
+add_subdirectory(src/game/server)
 
 # Set Visual Studio starting project
 if (MSVC)
