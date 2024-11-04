@@ -28,6 +28,10 @@ TODO:
 #include<VGUI_Dar.h>
 #include<VGUI_Scheme.h>
 #include<VGUI_Color.h>
+#include<VGUI_Cursor.h>
+#include <VGUI_MouseCode.h>
+#include <VGUI_KeyCode.h>
+#include <VGUI_RepaintSignal.h>
 
 namespace vgui
 {
