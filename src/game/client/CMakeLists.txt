@@ -223,7 +223,6 @@ set(HL1
 	"parsemsg.cpp"
 	"parsemsg.h"
 	"saytext.cpp"
-	"soundsystem.cpp"
 	"status_icons.cpp"
 	"statusbar.cpp"
 	"text_message.cpp"
@@ -377,8 +376,6 @@ source_group("Shared\\base64" FILES ${Shared_base64})
 
 set(VGUI
 	"ui/vgui_checkbutton2.cpp"
-	"ui/vgui_consolepanel.cpp"
-	"ui/vgui_consolepanel.h"
 	"ui/vgui_controlconfigpanel.cpp"
 	"ui/vgui_controlconfigpanel.h"
 	"ui/vgui_customobjects.cpp"
