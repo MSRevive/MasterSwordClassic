@@ -18,24 +18,30 @@ if (WIN32)
 	set_target_properties(fmod PROPERTIES IMPORTED_IMPLIB "${BASEDIR}/lib/public/fmod_vc.lib")
 	set_target_properties(discord PROPERTIES IMPORTED_IMPLIB "${BASEDIR}/lib/public/discord-rpc.lib")
 	set_target_properties(steam_api PROPERTIES IMPORTED_IMPLIB "${BASEDIR}/lib/public/steam_api.lib")
-#else()
-	# Copy libraries provided by the game to the build directory so we can point the compiler and linker to the files.
-	#configure_file(../../../utils/vgui/lib/linux/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_CURRENT_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} COPYONLY)
-	#configure_file(../../../external/SDL2/lib/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 ${CMAKE_CURRENT_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 COPYONLY)
-	
-	#set_target_properties(vgui PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX}")
-	#set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0")
+else()
+	set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "${BASEDIR}/lib/public/linux-x86/libSDL2.so")
+	set_target_properties(fmod PROPERTIES IMPORTED_LOCATION "${BASEDIR}/lib/public/linux-x86/libfmod.so")
+	set_target_properties(discord PROPERTIES IMPORTED_LOCATION "${BASEDIR}/lib/public/linux-x86/libdiscord-rpc.a")
+	set_target_properties(steam_api PROPERTIES IMPORTED_LOCATION "${BASEDIR}/lib/public/linux-x86/libsteam_api.so")
 endif()
 
 add_library(client SHARED)
 
 set_common_properties(client)
 
-target_link_options(client PRIVATE /SAFESEH:NO)
+if (MSVC)
+	target_link_options(client PRIVATE /SAFESEH:NO)
+else()
+	# vgui.so has no SONAME and we it must be linked through a -l: flag
+	# to avoid vgui.so linked by the absolute path
+	# and CMake refuses to use -l: instead of -l (which makes linker to expect `lib` prefix)
+	# yes, in 2024 it's still a bug!
+	target_link_libraries(client PRIVATE "-L${BASEDIR}/lib/public/linux-x86 -l:vgui.so")
+endif()
 
 target_link_libraries(client PRIVATE
 	$<$<PLATFORM_ID:Windows>:wsock32>
-	vgui
+	$<$<PLATFORM_ID:Windows>:vgui>
 	SDL2
 	fmod
 	discord
