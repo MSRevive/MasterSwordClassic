@@ -173,29 +173,7 @@ HUD_GetHullBounds
 */
 int DLLEXPORT HUD_GetHullBounds(int hullnumber, float *mins, float *maxs)
 {
-	int iret = 0;
-
-	Vector& vecMins = *reinterpret_cast<Vector*>(mins);
-	Vector& vecMaxs = *reinterpret_cast<Vector*>(maxs);
-
-	switch (hullnumber)
-	{
-	case 0: // Normal player
-		vecMins = Vector(-16, -16, -36);
-		vecMaxs = Vector(16, 16, 36);
-		iret = 1;
-		break;
-	case 1: // Crouched player
-		vecMins = Vector(-16, -16, -18);
-		vecMaxs = Vector(16, 16, 18);
-		iret = 1;
-		break;
-	case 2: // Point based hull
-		vecMins = Vector(0, 0, 0);
-		vecMaxs = Vector(0, 0, 0);
-		iret = 1;
-		break;
-	}
+	int iret = PM_GetHullBounds(hullnumber, mins, maxs) ? 1 : 0;
 
 	logfile << Logger::LOG_INFO << "[HUD_GetHullBounds: Complete]\n";
 

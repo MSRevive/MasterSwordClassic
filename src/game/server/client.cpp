@@ -42,6 +42,7 @@
 #include "svglobals.h"
 #include "mscharacter.h"
 #include "global.h"
+#include "pm_shared.h" // PM_GetHullBounds
 
 extern void PlayerPrecache();
 
@@ -2833,31 +2834,7 @@ GetHullBounds
 */
 int GetHullBounds(int hullnumber, float *mins, float *maxs)
 {
-	int iret = 0;
-
-	Vector& vecMins = *reinterpret_cast<Vector*>(mins);
-	Vector& vecMaxs = *reinterpret_cast<Vector*>(maxs);
-
-	switch (hullnumber)
-	{
-	case 0: // Normal player
-		vecMins = VEC_HULL_MIN;
-		vecMaxs = VEC_HULL_MAX;
-		iret = 1;
-		break;
-	case 1: // Crouched player
-		vecMins = VEC_DUCK_HULL_MIN;
-		vecMaxs = VEC_DUCK_HULL_MAX;
-		iret = 1;
-		break;
-	case 2: // Point based hull
-		vecMins = Vector(0, 0, 0);
-		vecMaxs = Vector(0, 0, 0);
-		iret = 1;
-		break;
-	}
-
-	return iret;
+	return PM_GetHullBounds(hullnumber, mins, maxs) ? 1 : 0;
 }
 
 /*
