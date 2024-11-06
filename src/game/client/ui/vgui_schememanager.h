@@ -1,4 +1,4 @@
-#include <vgui_font.h>
+#include <VGUI_Font.h>
 
 // handle to an individual scheme
 typedef int SchemeHandle_t;

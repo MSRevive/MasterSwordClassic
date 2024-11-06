@@ -8,12 +8,12 @@
 #ifndef SCOREPANEL_H
 #define SCOREPANEL_H
 
-#include <vgui_panel.h>
-#include <vgui_tablepanel.h>
-#include <vgui_headerpanel.h>
-#include <vgui_textgrid.h>
-#include <vgui_label.h>
-#include <vgui_textimage.h>
+#include <VGUI_Panel.h>
+#include <VGUI_TablePanel.h>
+#include <VGUI_HeaderPanel.h>
+#include <VGUI_TextGrid.h>
+#include <VGUI_Label.h>
+#include <VGUI_TextImage.h>
 #include "vgui_listbox.h"
 
 #include <ctype.h>

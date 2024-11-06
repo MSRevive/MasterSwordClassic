@@ -35,7 +35,7 @@
 
 #undef DLLEXPORT
 
-#include "vgui_font.h"
+#include <VGUI_Font.h>
 //#include <VGUI_TextImage.h>
 
 #include "../hud.h"

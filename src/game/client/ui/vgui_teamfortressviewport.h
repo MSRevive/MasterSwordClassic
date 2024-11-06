@@ -8,25 +8,25 @@
 #ifndef TEAMFORTRESSVIEWPORT_H
 #define TEAMFORTRESSVIEWPORT_H
 
-#include <vgui_panel.h>
-#include <vgui_frame.h>
-#include <vgui_textpanel.h>
-#include <vgui_label.h>
-#include <vgui_button.h>
-#include <vgui_actionsignal.h>
-#include <vgui_inputsignal.h>
-#include <vgui_scheme.h>
-#include <vgui_image.h>
-#include <vgui_fileinputstream.h>
-#include <vgui_bitmaptga.h>
-#include <vgui_desktopicon.h>
-#include <vgui_app.h>
-#include <vgui_miniapp.h>
-#include <vgui_lineborder.h>
-#include <vgui_string.h>
-#include <vgui_scrollpanel.h>
-#include <vgui_scrollbar.h>
-#include <vgui_slider.h>
+#include <VGUI_Panel.h>
+#include <VGUI_Frame.h>
+#include <VGUI_TextPanel.h>
+#include <VGUI_Label.h>
+#include <VGUI_Button.h>
+#include <VGUI_ActionSignal.h>
+#include <VGUI_InputSignal.h>
+#include <VGUI_Scheme.h>
+#include <VGUI_Image.h>
+#include <VGUI_FileInputStream.h>
+#include <VGUI_BitmapTGA.h>
+#include <VGUI_DesktopIcon.h>
+#include <VGUI_App.h>
+#include <VGUI_MiniApp.h>
+#include <VGUI_LineBorder.h>
+#include <VGUI_String.h>
+#include <VGUI_ScrollPanel.h>
+#include <VGUI_ScrollBar.h>
+#include <VGUI_Slider.h>
 
 //Master Sword
 #define SetFGColorRGB(col) setFgColor(col.r, col.g, col.b, col.a)

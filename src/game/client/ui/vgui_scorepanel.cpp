@@ -19,7 +19,7 @@
 // $NoKeywords: $
 //=============================================================================
 
-#include <vgui_lineborder.h>
+#include <VGUI_LineBorder.h>
 
 #include "hud.h"
 #include "cl_util.h"

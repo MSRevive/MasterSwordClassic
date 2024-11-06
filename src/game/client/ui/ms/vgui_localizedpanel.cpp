@@ -3,7 +3,7 @@
 #include "hud.h"
 #include "cl_util.h"
 #include "vgui_teamfortressviewport.h"
-#include "vgui_textimage.h"
+#include "VGUI_TextImage.h"
 #include "parsemsg.h"
 
 #include "sharedutil.h"
