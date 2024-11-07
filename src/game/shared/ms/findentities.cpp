@@ -264,7 +264,7 @@ bool CRectangleFilter::SetFromString(msstring vsString)
 	float vXSize;
 	float vYSize;
 	float vZSize;
-	bOk = sscanf(vsString.c_str(), "Rec3D((%f,%f,%f),%f,%f,%f)", &vOrigin, &vXSize, &vYSize, &vZSize) == 6;
+	bOk = sscanf(vsString.c_str(), "Rec3D((%f,%f,%f),%f,%f,%f)", &vOrigin.x, &vOrigin.y, &vOrigin.z, &vXSize, &vYSize, &vZSize) == 6;
 
 	if (bOk)
 	{

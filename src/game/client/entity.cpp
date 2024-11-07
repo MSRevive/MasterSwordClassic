@@ -586,8 +586,9 @@ void TempEntCallback(struct tempent_s *ent, float frametime, float currenttime)
 
 	g_CurrentTempEnt = ent;
 	HUDScript->Effects_UpdateTempEnt(STRING(ent->entity.curstate.iuser3));
-	g_CurrentTempEnt = false;
+	g_CurrentTempEnt = nullptr;
 }
+
 void TempEntHitCallback(struct tempent_s *ent, struct pmtrace_s *ptr)
 {
 	startdbg;
