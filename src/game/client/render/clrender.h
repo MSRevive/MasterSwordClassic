@@ -319,8 +319,13 @@ void RenderModel(cl_entity_t *pEntity);
 #include <GL/glu.h>	  // Header File For The GLu32 Library
 #include <GL/glext.h>
 
+#ifdef _WIN32
 extern PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB;
 extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;
+#else // _WIN32
+#define glMultiTexCoord2fARB glMultiTexCoord2f
+#define glActiveTextureARB glActiveTexture
+#endif
 
 #include "ref_params.h"
 

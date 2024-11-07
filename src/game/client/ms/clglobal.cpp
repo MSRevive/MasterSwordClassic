@@ -399,19 +399,29 @@ void MSCLGlobals::Cleanup()
 	enddbg;
 }
 
+void DLLAttach(HINSTANCE hinstDLL)
+{
+	MSGlobals::DLLAttach(hinstDLL);
+}
+
+void DLLDetach()
+{
+	//if( logfile.is_open() ) logfile << __FILE__ << ":" << ((int)__LINE__) << " client.dll being unloaded" << endl;
+	if (logfile.is_open())
+		(((logfile << Logger::LOG_INFO << __FILE__) << " client.dll being unloaded\n"));
+	//RichPresenceShutdown();
+	MSGlobals::EndMap();
+	MSCLGlobals::DLLDetach();
+	MSGlobals::DLLDetach();
+}
+
+#if _WIN32
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
 	if (fdwReason == DLL_PROCESS_ATTACH)
-		MSGlobals::DLLAttach(hinstDLL);
+		DLLAttach(hinstDLL);
 	else if (fdwReason == DLL_PROCESS_DETACH)
-	{
-		//if( logfile.is_open() ) logfile << __FILE__ << ":" << ((int)__LINE__) << " client.dll being unloaded" << endl;
-		if (logfile.is_open())
-			(((logfile << Logger::LOG_INFO << __FILE__) << " client.dll being unloaded\n"));
-		//RichPresenceShutdown();
-		MSGlobals::EndMap();
-		MSCLGlobals::DLLDetach();
-		MSGlobals::DLLDetach();
-	}
+		DLLDetach();
 	return TRUE;
 }
+#endif

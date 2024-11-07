@@ -750,6 +750,8 @@ void VGUI_TextPanel::KeyInput( int down, int keynum, const char *pszCurrentBindi
 		return;
 	}
 
+// TODO!!!
+#ifdef _WIN32
 	byte State[256];
 	BOOL Success = GetKeyboardState( State );
 	if( !Success ) return;
@@ -765,4 +767,5 @@ void VGUI_TextPanel::KeyInput( int down, int keynum, const char *pszCurrentBindi
 	//char Temp[2] = { m_Caps ? toupper(Char) : Char, '\0' };
 	char Temp[2] = { Char & 0xFF, '\0' };
 	AddLetter( Temp );
+#endif
 }

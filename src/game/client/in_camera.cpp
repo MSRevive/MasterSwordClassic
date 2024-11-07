@@ -77,6 +77,13 @@ int iMouseInUse = 0;
 int cam_distancemove;
 extern int mouse_x, mouse_y;		  //used to determine what the current x and y values are
 int cam_old_mouse_x, cam_old_mouse_y; //holds the last ticks mouse movement
+#ifndef _WIN32
+struct POINT
+{
+	int x, y;
+};
+#endif
+
 POINT cam_mouse;
 //-------------------------------------------------- Local Variables
 
@@ -91,6 +98,15 @@ void CAM_StartDistance(void);
 void CAM_EndDistance(void);
 
 //-------------------------------------------------- Local Functions
+
+#ifndef _WIN32
+static void GetCursorPos( POINT *p )
+{
+	gEngfuncs.GetMousePosition( &p->x, &p->y );
+}
+
+static void SetCursorPos( const int x, const int y ) { }
+#endif
 
 float MoveToward(float cur, float goal, float maxspeed)
 {

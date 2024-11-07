@@ -24,8 +24,10 @@
 
 //OGL
 void DeleteGLTextures();
+#ifdef _WIN32
 PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB = NULL;
 PFNGLACTIVETEXTUREARBPROC glActiveTextureARB = NULL;
+#endif
 
 //Environment Manager
 float CEnvMgr::m_LightGamma = 2.5;
