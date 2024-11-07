@@ -4707,7 +4707,7 @@ bool CScript::ScriptCmd_PlaySound(SCRIPT_EVENT &Event, scriptcmd_t &Cmd, msstrin
 				NextParm++;
 			}
 
-			msstring_ref pszSound = ((signed)Params.size() > NextParm) ? Params[NextParm] : "common/null.wav";
+			msstring_ref pszSound = ((signed)Params.size() > NextParm) ? Params[NextParm].c_str() : "common/null.wav";
 
 			//Thothie debugary
 			/*
@@ -7174,7 +7174,7 @@ bool CScript::ScriptCmd_Velocity(SCRIPT_EVENT &Event, scriptcmd_t &Cmd, msstring
 			if (pEntity != NULL)
 			{
 				bool abort_push = false;
-				if ((pEntity != pCaller) && (Params[2] != "override"))
+				if ((pEntity != pCaller) && Params.size() >= 3 && (Params[2] != "override"))
 				{
 					CMSMonster* pMonster = (pEntity->IsMSMonster() ? (CMSMonster*)pEntity : NULL);
 					if (pMonster)

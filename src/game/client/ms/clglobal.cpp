@@ -185,7 +185,7 @@ void MSCLGlobals::Think()
 	//Count backward
 	for (int e = m_ClEntites.size() - 1; e >= 0; e--)
 		if (FBitSet(m_ClEntites[e]->pev->flags, FL_KILLME))
-			RemoveEnt(m_ClEntites[e]);
+			RemoveEnt(m_ClEntites[e], m_ClEntites[e] != &player);
 
 	//Call entity Think() functions
 	for (int e = 0; e < m_ClEntites.size(); e++)

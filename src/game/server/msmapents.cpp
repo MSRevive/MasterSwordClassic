@@ -892,7 +892,7 @@ public:
 				}
 				//if ( iHPReq_min == 0 ) iHPReq_min = 1; //OCT2015_28 disabled in case all players flagged AFK
 			}
-			if (reqhp_stringlist.size() > 2 || reqhp_stringlist[1].contains("avg")) hpreq_useavg = true; //Thothie OCT2015_28 - allow use average when calculating HP req, if token 2-3 is "avg"
+			if (reqhp_stringlist.size() > 2 && reqhp_stringlist[1].contains("avg")) hpreq_useavg = true; //Thothie OCT2015_28 - allow use average when calculating HP req, if token 2-3 is "avg"
 			pkvd->fHandled = TRUE;
 		}
 		else

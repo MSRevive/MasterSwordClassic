@@ -1266,11 +1266,14 @@ void CScript::CLScriptedEffect(msstringlist &Params)
 		NewLight.color.g = Color.y;
 		NewLight.color.b = Color.z;
 		NewLight.die = gEngfuncs.GetClientTime() + atof(Params[NextParm++]);
-		msstring &Flags = Params[NextParm++];
-		if (Flags.contains("entity"))
-			EntityLight = true;
-		if (Flags.contains("dark"))
-			NewLight.dark = true;
+		if( NextParm >= Params.size())
+		{
+			msstring &Flags = Params[NextParm++];
+			if (Flags.contains("entity"))
+				EntityLight = true;
+			if (Flags.contains("dark"))
+				NewLight.dark = true;
+		}
 
 		dlight_t *pLight = Params[1] == "new" ? (EntityLight ? gEngfuncs.pEfxAPI->CL_AllocElight(0) : gEngfuncs.pEfxAPI->CL_AllocDlight(0)) : (dlight_t *)atoi(Params[1]);
 
