@@ -73,13 +73,13 @@ typedef struct cl_entity_s cl_entity_t;
 
 struct cl_entity_s
 {
-	int index; // Index into cl_entities ( should match actual slot, but not necessarily )
+	int index = 0; // Index into cl_entities ( should match actual slot, but not necessarily )
 
-	qboolean player; // True if this entity is a "player"
+	qboolean player = false; // True if this entity is a "player"
 
-	entity_state_t baseline;  // The original state from which to delta during an uncompressed message
-	entity_state_t prevstate; // The state information from the penultimate message received from the server
-	entity_state_t curstate;  // The state information from the last message received from server
+	entity_state_t baseline{ 0 };  // The original state from which to delta during an uncompressed message
+	entity_state_t prevstate{ 0 }; // The state information from the penultimate message received from the server
+	entity_state_t curstate{ 0 };  // The state information from the last message received from server
 
 	int current_position;				// Last received history update index
 	position_history_t ph[HISTORY_MAX]; // History of position and angle updates for this player
@@ -102,7 +102,7 @@ struct cl_entity_s
 	// Other entity local information
 	int trivial_accept;
 
-	struct model_s *model;	 // cl.model_precache[ curstate.modelindes ];  all visible entities have a model
+	struct model_s *model = nullptr;	 // cl.model_precache[ curstate.modelindes ];  all visible entities have a model
 	struct efrag_s *efrag;	 // linked list of efrags
 	struct mnode_s *topnode; // for bmodels, first world node that splits bmodel, or NULL if not split
 

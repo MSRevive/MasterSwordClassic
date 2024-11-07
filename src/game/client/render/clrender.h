@@ -64,7 +64,7 @@ public:
 	//Callbacks
 	virtual void CB_UnRegistered();
 
-	cl_entity_t *m_pEnt;
+	cl_entity_t *m_pEnt = nullptr;
 	cl_entity_t m_Ent;
 	bool m_Visible,	 //Currently visible
 		m_ClientEnt; //If true, this should be added to the entity list.  If false, it's a server ent
@@ -85,7 +85,7 @@ public:
 	virtual void RenderGearItem(CGenericItem &Item);
 	virtual cl_entity_t &GearItemEntity(CGenericItem &Item) { return Item.m_ClEntity[CGenericItem::ITEMENT_NORMAL]; }
 
-	CItemList *m_pGear;
+	CItemList *m_pGear = nullptr;
 	CItemList m_Gear;
 
 	//cl_entity_t m_BodyParts[HUMAN_BODYPARTS];
