@@ -51,7 +51,7 @@ public:
 		REQUEST_FINISHED,
 	};
 
-	std::future<bool> m_ResponseFuture;
+	std::future<void> m_ResponseFuture;
 
 protected: // Expose data to inheriting classes.
 	char m_sPchAPIUrl[REQUEST_URL_SIZE];
@@ -64,8 +64,6 @@ protected: // Expose data to inheriting classes.
 
 	ID64 m_iSteamID64;
 	ID64 m_iSlot;
-
-	CURLcode m_Result;
 
 private: // Keep this private.
 	static size_t WriteCallbackDispatcher(void* buf, size_t sz, size_t n, void* curlGet);

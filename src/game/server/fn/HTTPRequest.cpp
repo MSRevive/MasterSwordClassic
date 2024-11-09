@@ -94,6 +94,7 @@ void HTTPRequest::SetupRequest()
 	curl_easy_setopt(m_Handle, CURLOPT_SSL_VERIFYPEER, 0L);
 	curl_easy_setopt(m_Handle, CURLOPT_SSL_VERIFYHOST, 0L);
 	curl_easy_setopt(m_Handle, CURLOPT_NOSIGNAL, 1L);
+	curl_easy_setopt(m_Handle, CURLOPT_USERAGENT, "MSR Game Server");
 
 	// Process request body.
 	if (m_sRequestBody != nullptr)
@@ -140,8 +141,18 @@ bool HTTPRequest::SendRequest()
 	m_iRequestState = RequestState::REQUEST_EXECUTED;
 	m_Handle = curl_easy_init();
 	SetupRequest();
+	
+	curl_easy_setopt(m_Handle, CURLOPT_WRITEFUNCTION, HTTPRequest::WriteCallbackDispatcher);
+	curl_easy_setopt(m_Handle, CURLOPT_WRITEDATA, this);
+	CURLcode result = curl_easy_perform(m_Handle);
+	if (result == CURLE_OK)
+		m_Promise.set_value(true);
+	else
+		m_Promise.set_value(false);
 
-	return PerformRequest();
+	curl_easy_cleanup(m_Handle);
+	m_Handle = nullptr;
+	return result;
 }
 
 // This will pause the main thread until the async thread finishes it's task.
@@ -158,7 +169,7 @@ bool HTTPRequest::AsyncSendRequest()
 	m_ResponseFuture = std::async(std::launch::async, &HTTPRequest::PerformRequest, this);
 
 	bool result = false;
-	if ((m_Promise.get_future().get() == true) && (m_Result == CURLE_OK))
+	if (m_Promise.get_future().get() == true)
 	{
 		int httpCode = 200;
 		curl_easy_getinfo(m_Handle, CURLINFO_RESPONSE_CODE, &httpCode);
@@ -168,9 +179,7 @@ bool HTTPRequest::AsyncSendRequest()
 		ResponseCallback(0);
 		result = false;
 	}
-
-	curl_easy_cleanup(m_Handle);
-	m_Handle = nullptr;
+	
 	return result;
 }
 
@@ -193,13 +202,12 @@ void HTTPRequest::AsyncSendRequestDiscard()
 void HTTPRequest::PerformRequest()
 {
 	if (!m_Handle) 
-		return false;
+		return;
 
-	curl_easy_setopt(m_Handle, CURLOPT_USERAGENT, "MSR Game Server");
 	curl_easy_setopt(m_Handle, CURLOPT_WRITEFUNCTION, HTTPRequest::WriteCallbackDispatcher);
 	curl_easy_setopt(m_Handle, CURLOPT_WRITEDATA, this);
-	m_Result = curl_easy_perform(m_Handle);
-	if (m_Result == CURLE_OK)
+	CURLcode result = curl_easy_perform(m_Handle);
+	if (result == CURLE_OK)
 		m_Promise.set_value(true);
 	else
 		m_Promise.set_value(false);
