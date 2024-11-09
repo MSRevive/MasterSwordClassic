@@ -65,6 +65,8 @@ protected: // Expose data to inheriting classes.
 	ID64 m_iSteamID64;
 	ID64 m_iSlot;
 
+	CURLcode m_Result;
+
 private: // Keep this private.
 	static size_t WriteCallbackDispatcher(void* buf, size_t sz, size_t n, void* curlGet);
 	size_t WriteCallback(void* ptr, size_t size, size_t nmemb);
@@ -74,7 +76,7 @@ private: // Keep this private.
 	void Cleanup();
 
 	void SetupRequest();
-	bool PerformRequest();
+	void PerformRequest();
 
 	HTTPMethod m_eHTTPMethod;
 	CURL* m_Handle;

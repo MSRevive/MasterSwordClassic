@@ -156,7 +156,22 @@ bool HTTPRequest::AsyncSendRequest()
 	SetupRequest();
 
 	m_ResponseFuture = std::async(std::launch::async, &HTTPRequest::PerformRequest, this);
-	return m_Promise.get_future().get();
+
+	bool result = false;
+	if ((m_Promise.get_future().get() == true) && (m_Result == CURLE_OK))
+	{
+		int httpCode = 200;
+		curl_easy_getinfo(m_Handle, CURLINFO_RESPONSE_CODE, &httpCode);
+		ResponseCallback(httpCode);
+		result = true;
+	}else{
+		ResponseCallback(0);
+		result = false;
+	}
+
+	curl_easy_cleanup(m_Handle);
+	m_Handle = nullptr;
+	return result;
 }
 
 // This ignores the result of the async thread.
@@ -171,32 +186,23 @@ void HTTPRequest::AsyncSendRequestDiscard()
 
 	// we use a lambda here because we don't care about the result
 	auto future = std::async(std::launch::async, &HTTPRequest::PerformRequest, this);
+	curl_easy_cleanup(m_Handle);
+	m_Handle = nullptr;
 }
 
-bool HTTPRequest::PerformRequest()
+void HTTPRequest::PerformRequest()
 {
 	if (!m_Handle) 
 		return false;
 
-	bool success = false;
 	curl_easy_setopt(m_Handle, CURLOPT_USERAGENT, "MSR Game Server");
 	curl_easy_setopt(m_Handle, CURLOPT_WRITEFUNCTION, HTTPRequest::WriteCallbackDispatcher);
 	curl_easy_setopt(m_Handle, CURLOPT_WRITEDATA, this);
-	CURLcode result = curl_easy_perform(m_Handle);
-	if (result == CURLE_OK)
-	{
-		int httpCode = 200;
-		curl_easy_getinfo(m_Handle, CURLINFO_RESPONSE_CODE, &httpCode);
-		ResponseCallback(httpCode);
-		success = true;
-	}else{
-		ResponseCallback(0);
-		success = false;
-	}
-	curl_easy_cleanup(m_Handle);
-	m_Handle = nullptr;
-	m_Promise.set_value(success);
-	return success;
+	m_Result = curl_easy_perform(m_Handle);
+	if (m_Result == CURLE_OK)
+		m_Promise.set_value(true);
+	else
+		m_Promise.set_value(false);
 }
 
 size_t HTTPRequest::WriteCallbackDispatcher(void* buf, size_t sz, size_t n, void* curlGet)
