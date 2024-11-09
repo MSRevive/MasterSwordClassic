@@ -9,7 +9,7 @@
 #define HAVE_SYS_SOCKET_H
 #endif
 
-#include <string>
+#include <future>
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 
@@ -144,11 +144,12 @@ bool HTTPRequest::SendRequest()
 	
 	curl_easy_setopt(m_Handle, CURLOPT_WRITEFUNCTION, HTTPRequest::WriteCallbackDispatcher);
 	curl_easy_setopt(m_Handle, CURLOPT_WRITEDATA, this);
-	CURLcode result = curl_easy_perform(m_Handle);
-	if (result == CURLE_OK)
-		m_Promise.set_value(true);
+	CURLcode curlResult = curl_easy_perform(m_Handle);
+	bool result = false;
+	if (curlResult == CURLE_OK)
+		result = true;
 	else
-		m_Promise.set_value(false);
+		result = false;
 
 	curl_easy_cleanup(m_Handle);
 	m_Handle = nullptr;
@@ -166,10 +167,10 @@ bool HTTPRequest::AsyncSendRequest()
 	m_Handle = curl_easy_init();
 	SetupRequest();
 
-	m_ResponseFuture = std::async(std::launch::async, &HTTPRequest::PerformRequest, this);
+	std::future<bool> future = std::async(std::launch::async, &HTTPRequest::PerformRequest, this);
 
 	bool result = false;
-	if (m_Promise.get_future().get() == true)
+	if (future.get() == true)
 	{
 		int httpCode = 200;
 		curl_easy_getinfo(m_Handle, CURLINFO_RESPONSE_CODE, &httpCode);
@@ -199,18 +200,18 @@ void HTTPRequest::AsyncSendRequestDiscard()
 	m_Handle = nullptr;
 }
 
-void HTTPRequest::PerformRequest()
+bool HTTPRequest::PerformRequest()
 {
 	if (!m_Handle) 
-		return;
+		return false;
 
 	curl_easy_setopt(m_Handle, CURLOPT_WRITEFUNCTION, HTTPRequest::WriteCallbackDispatcher);
 	curl_easy_setopt(m_Handle, CURLOPT_WRITEDATA, this);
 	CURLcode result = curl_easy_perform(m_Handle);
 	if (result == CURLE_OK)
-		m_Promise.set_value(true);
+		return true;
 	else
-		m_Promise.set_value(false);
+		return false;
 }
 
 size_t HTTPRequest::WriteCallbackDispatcher(void* buf, size_t sz, size_t n, void* curlGet)

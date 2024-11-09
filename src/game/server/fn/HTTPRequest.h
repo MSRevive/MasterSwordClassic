@@ -5,7 +5,7 @@
 #ifndef HTTP_BASE_REQUEST_H
 #define HTTP_BASE_REQUEST_H
 
-#include <future>
+#include <string>
 #include <rapidjson/fwd.h> // Rapid JSON Helpers from Infestus!
 #include <curl/curl.h>
 #ifdef _WIN32
@@ -51,8 +51,6 @@ public:
 		REQUEST_FINISHED,
 	};
 
-	std::future<void> m_ResponseFuture;
-
 protected: // Expose data to inheriting classes.
 	char m_sPchAPIUrl[REQUEST_URL_SIZE];
 
@@ -74,12 +72,12 @@ private: // Keep this private.
 	void Cleanup();
 
 	void SetupRequest();
-	void PerformRequest();
+	bool PerformRequest();
 
 	HTTPMethod m_eHTTPMethod;
 	CURL* m_Handle;
 
-	std::promise<bool> m_Promise;
+	//std::promise<bool> m_Promise;
 
 private:
 	HTTPRequest(const HTTPRequest&); // No copy-constructor pls.
