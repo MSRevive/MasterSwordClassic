@@ -13,17 +13,6 @@
 //#include "pcxloader.h"
 #include "textureloader.h"
 
-#ifndef _WIN32
-void strlwr(char *string)
-{
-	char *p = string;
-	while (*p != 0)
-	{
-		*p = tolower(*p);
-		p++;
-	}
-}
-#endif
 void DbgLog(char *szFmt, ...);
 
 namespace Tartan
@@ -41,13 +30,15 @@ namespace Tartan
 			//cout << "Tartan::LoadTextureFile() Error: File " << sFilePath << " has an invalid filename extension" << endl;
 		}
 
-		char filetypestring[MAX_PATH];
-		 _snprintf(filetypestring, sizeof(filetypestring),  "%s",  sFilePath + strlen(sFilePath) - 4 );
+		const char *filetypestring = sFilePath + strlen(sFilePath) - 4;
 
 		DbgLog("LoadTextureFile - Filetype: %s", filetypestring);
 
-		strlwr(filetypestring);
-		if (strcmp(filetypestring, ".tga") == 0)
+#ifdef _WIN32
+		if (stricmp(filetypestring, ".tga") == 0)
+#else
+		if (strcasecmp(filetypestring, ".tga") == 0)
+#endif
 		{
 			return LoadTextureTGA(sFilePath, LoadTex);
 		}
@@ -216,7 +207,7 @@ namespace Tartan
 		if (AdjustedTexture)
 		{
 			DbgLog("delete DataPixels");
-			delete DataPixels;
+			delete[] DataPixels;
 		}
 
 		if (Texture.imageData) // If Texture Image Exists ( CHANGE )

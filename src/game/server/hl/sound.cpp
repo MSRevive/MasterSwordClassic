@@ -24,6 +24,7 @@
 #include "player.h"
 #include "gamerules.h"
 #include "filesystem_shared.h"
+#include "pm_shared.h" // memfgets
 
 #ifdef POSIX
 #include <stdlib.h>
@@ -1313,56 +1314,6 @@ void SENTENCEG_Stop(edict_t *entity, int isentenceg, int ipick)
 // open sentences.txt, scan for groups, build rgsentenceg
 // Should be called from world spawn, only works on the
 // first call and is ignored subsequently.
-
-static char* memfgets(const byte* pMemFile, std::size_t fileSize, std::size_t& filePos, char* pBuffer, std::size_t bufferSize)
-{
-	// Bullet-proofing
-	if (!pMemFile || !pBuffer)
-		return nullptr;
-
-	if (filePos >= fileSize)
-		return nullptr;
-
-	std::size_t i = filePos;
-	std::size_t last = fileSize;
-
-	// fgets always nullptr terminates, so only read bufferSize-1 characters
-	if (last - filePos > (bufferSize - 1))
-		last = filePos + (bufferSize - 1);
-
-	bool stop = false;
-
-	const auto text = reinterpret_cast<const char*>(pMemFile);
-
-	// Stop at the next newline (inclusive) or end of buffer
-	while (i < last && !stop)
-	{
-		if (text[i] == '\n')
-			stop = true;
-		i++;
-	}
-
-
-	// If we actually advanced the pointer, copy it over
-	if (i != filePos)
-	{
-		// We read in size bytes
-		std::size_t size = i - filePos;
-		// copy it out
-		memcpy(pBuffer, text + filePos, sizeof(byte) * size);
-
-		// If the buffer isn't full, terminate (this is always true)
-		if (size < bufferSize)
-			pBuffer[size] = 0;
-
-		// Update file pointer
-		filePos = i;
-		return pBuffer;
-	}
-
-	// No data read, bail
-	return nullptr;
-}
 
 void SENTENCEG_Init()
 {

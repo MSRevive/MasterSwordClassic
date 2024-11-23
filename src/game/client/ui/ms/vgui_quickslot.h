@@ -5,6 +5,7 @@
 
 #include "syntax/syntax.h"
 #include "vgui_ihud.h"
+#include <limits>
 
 static COLOR Color_Text_QuickSlot_Weapon(255, 255, 255, 0);
 static COLOR Color_Text_QuickSlot_Spell(120, 255, 255, 0);
@@ -116,7 +117,7 @@ public:
 				{
 					SelectItem(pItem, m_SelectedSlot.Type);
 					m_SelectedSlot.ID = pItem->m_iId;
-					if (m_FirstQuickItem == MAXUINT32)
+					if (m_FirstQuickItem == std::numeric_limits<uint>::max())
 						m_FirstQuickItem = pItem->m_iId;
 					if (MSCLGlobals::DefaultHUDSounds.QuickSlot_Select)
 						PlayHUDSound("ui/buttonclick.wav", 1.0f); //Thothie FEB2008a - original: PlayHUDSound( MSCLGlobals::DefaultHUDSounds.QuickSlot_Select, 1.0f );
@@ -208,7 +209,7 @@ public:
 				{
 					SelectItem(pArrow, m_SelectedSlot.Type);
 					/*if ( !GENERIC )*/ m_SelectedSlot.ID = pArrow->m_iId;
-					if (m_FirstQuickItem == MAXUINT32 && !GENERIC)
+					if (m_FirstQuickItem == std::numeric_limits<uint>::max() && !GENERIC)
 						m_FirstQuickItem = pArrow->m_iId;
 					if (MSCLGlobals::DefaultHUDSounds.QuickSlot_Select)
 					{
@@ -254,8 +255,8 @@ public:
 			m_Active = false;
 			m_SelectedSlot.Active = false;
 			m_Name->setVisible(false);
-			m_FirstQuickItem = MAXUINT32;
-			m_SelectedSlot.ID = MAXUINT32;
+			m_FirstQuickItem = std::numeric_limits<uint>::max();
+			m_SelectedSlot.ID = std::numeric_limits<uint>::max();
 			m_Cycle = 0;
 		}
 	}

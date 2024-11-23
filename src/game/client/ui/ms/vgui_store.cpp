@@ -31,7 +31,7 @@
 #include "../cl_util.h"
 #include "../parsemsg.h"
 #include "../vgui_teamfortressviewport.h"
-#include <vgui_textimage.h>
+#include <VGUI_TextImage.h>
 
 //Master Sword
 #include "sharedutil.h"

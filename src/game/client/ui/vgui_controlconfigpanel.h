@@ -2,8 +2,8 @@
 #ifndef CONTROLCONFIGPANEL_H
 #define CONTROLCONFIGPANEL_H
 
-#include <vgui_panel.h>
-#include <vgui_dar.h>
+#include <VGUI_Panel.h>
+#include <VGUI_Dar.h>
 
 namespace vgui
 {

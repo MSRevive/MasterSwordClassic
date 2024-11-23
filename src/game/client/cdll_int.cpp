@@ -26,7 +26,9 @@
 #include "logger.h"
 #include "clientlibrary.h"
 #include "movement/pm_shared.h"
+#ifdef _WIN32
 #include <windows.h>
+#endif
 
 //#define LOG_ALLEXPORTS //more exports in entity.cpp
 
@@ -40,6 +42,7 @@
 #include "vgui_int.h"
 #include "interface.h"
 #include "voice_status.h"
+#include "ms/clglobal.h"
 
 #define DLLEXPORT EXPORT
 
@@ -95,6 +98,7 @@ Set Borderless Modes
 */
 static void SetBorderlessWindow() // Bernt; fixing bloom by making fullscreen windowed a thing *shrugs*!
 {
+#ifdef _WIN32
 	int iCurrentMode = (g_pVarBorderless ? ((int)g_pVarBorderless->value) : 0);
 	if ((g_iBorderlessMode == iCurrentMode) || (iCurrentMode <= 0))
 		return;
@@ -136,6 +140,7 @@ static void SetBorderlessWindow() // Bernt; fixing bloom by making fullscreen wi
 	}
 
 	g_iBorderlessMode = iCurrentMode;
+#endif // _WIN32
 }
 
 /* =================================
@@ -173,29 +178,7 @@ HUD_GetHullBounds
 */
 int DLLEXPORT HUD_GetHullBounds(int hullnumber, float *mins, float *maxs)
 {
-	int iret = 0;
-
-	Vector& vecMins = *reinterpret_cast<Vector*>(mins);
-	Vector& vecMaxs = *reinterpret_cast<Vector*>(maxs);
-
-	switch (hullnumber)
-	{
-	case 0: // Normal player
-		vecMins = Vector(-16, -16, -36);
-		vecMaxs = Vector(16, 16, 36);
-		iret = 1;
-		break;
-	case 1: // Crouched player
-		vecMins = Vector(-16, -16, -18);
-		vecMaxs = Vector(16, 16, 18);
-		iret = 1;
-		break;
-	case 2: // Point based hull
-		vecMins = Vector(0, 0, 0);
-		vecMaxs = Vector(0, 0, 0);
-		iret = 1;
-		break;
-	}
+	int iret = PM_GetHullBounds(hullnumber, mins, maxs) ? 1 : 0;
 
 	logfile << Logger::LOG_INFO << "[HUD_GetHullBounds: Complete]\n";
 
@@ -249,11 +232,15 @@ int DLLEXPORT Initialize(cl_enginefunc_t *pEnginefuncs, int iVersion)
 	if (iVersion != CLDLL_INTERFACE_VERSION)
 		return 0;
 
+#ifndef _WIN32
+	DLLAttach(0);
+#endif
+
 	memcpy(&gEngfuncs, pEnginefuncs, sizeof(cl_enginefunc_t));
 
 	EV_HookEvents();
 	g_pVarBorderless = CVAR_CREATE("ms_borderless", "0", FCVAR_ARCHIVE);
-	
+
 	if(!gClient.Initialize())
 		return 0;
 

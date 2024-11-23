@@ -24,8 +24,10 @@
 
 //OGL
 void DeleteGLTextures();
+#ifdef _WIN32
 PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB = NULL;
 PFNGLACTIVETEXTUREARBPROC glActiveTextureARB = NULL;
+#endif
 
 //Environment Manager
 float CEnvMgr::m_LightGamma = 2.5;
@@ -334,7 +336,7 @@ void CEnvMgr::SetLightGamma(float Value)
 	TraverseAllNodes(gEngfuncs.GetEntityByIndex(0)->model->nodes, Surface_ResetLighting);
 }
 
-void CEnvMgr::ChangeTint(Color4F &Color)
+void CEnvMgr::ChangeTint(const Color4F &Color)
 {
 	g_Tint.m_ContinuedParticle = false;
 	g_Tint.m_DoubleSided = false;

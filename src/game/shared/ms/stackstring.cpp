@@ -1,5 +1,6 @@
 #include "Platform.h"
 #include "stackstring.h"
+#include "msdebug.h"
 
 #undef msstring
 
@@ -14,6 +15,7 @@ msstring::msstring(const msstring_ref a, size_t length)
 	data[length] = 0;
 }
 msstring::msstring(const msstring &a) { operator=(a); }
+msstring::msstring(const string_i &a) { operator=(a); }
 msstring &msstring::operator=(const msstring_ref a)
 {
 	if (a == data)
@@ -40,10 +42,11 @@ msstring &msstring::operator+=(int a)
 	return operator+=((const msstring_ref &)(tmp));
 }
 msstring msstring::operator+(const msstring_ref a) { return msstring(data) += a; }
-msstring msstring::operator+(msstring &a) { return msstring(data) += (const char *)a; }
+msstring msstring::operator+(const msstring &a) { return msstring(data) += a.data; }
+msstring msstring::operator+(const string_i &a) { return msstring(data) += a.c_str(); }
 msstring msstring::operator+(int a) { return msstring(data) += a; }
 bool msstring::operator==(char *a) const { return !strcmp(data, a); }
-bool msstring::operator==(const char *a) const { return !strcmp(data, (const char *)a); }
+bool msstring::operator==(const char *a) const { return !strcmp(data, a); }
 msstring::operator char *() { return data; }
 char *msstring::c_str() { return data; }
 void msstring::append(const msstring_ref a, size_t length)

@@ -12,8 +12,8 @@
 
 #include "tgastruct.h"
 
-#include <gl/gl.h>	  // Header File For The OpenGL32 Library
-#include <gl/glu.h>	  // Header File For The GLu32 Library
+#include <GL/gl.h>	  // Header File For The OpenGL32 Library
+#include <GL/glu.h>	  // Header File For The GLu32 Library
 
 #include "msfileio.h"
 #include "textureloader.h"
@@ -91,8 +91,7 @@ namespace Tartan
 
 		tga.bytesPerPixel = (tga.Bpp / 8);							  // Compute the number of BYTES per pixel
 		tga.imageSize = (tga.bytesPerPixel * tga.Width * tga.Height); // Compute the total amout ofmemory needed to store data
-		int sz = tga.imageSize;
-		texture->imageData = (GLubyte *)malloc(tga.imageSize); // Allocate that much memory
+		texture->imageData = new GLubyte[tga.imageSize]; // Allocate that much memory
 
 		if (texture->imageData == NULL) // If no space was allocated
 		{
@@ -105,7 +104,7 @@ namespace Tartan
 		GLubyte IDData[256];
 		if (tgaheader.identsize)
 		{
-			if (!File.Read(IDData, min(tgaheader.identsize, 256)))
+			if (!File.Read(IDData, std::min((int)tgaheader.identsize, 256)))
 			{
 				File.Close();
 				return false;
@@ -146,7 +145,7 @@ namespace Tartan
 				int OldRowStart = ((tga.Height - row) - 1) * RowSize;
 				memcpy(&NewData[NewRowStart], &texture->imageData[OldRowStart], RowSize);
 			}
-			delete texture->imageData;
+			delete[] texture->imageData;
 			texture->imageData = NewData;
 		}
 

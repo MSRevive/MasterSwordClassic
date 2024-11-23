@@ -451,15 +451,15 @@ public:
 	~CHud() = default; // destructor, frees allocated memory
 
 	// user messages
-	int _cdecl MsgFunc_Damage(const char *pszName, int iSize, void *pbuf);
-	int _cdecl MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf);
-	//int _cdecl MsgFunc_Logo(const char *pszName,  int iSize, void *pbuf);
-	int _cdecl MsgFunc_ResetHUD(const char *pszName, int iSize, void *pbuf);
-	void _cdecl MsgFunc_InitHUD(const char *pszName, int iSize, void *pbuf);
-	void _cdecl MsgFunc_ViewMode(const char *pszName, int iSize, void *pbuf);
-	int _cdecl MsgFunc_SetFOV(const char *pszName, int iSize, void *pbuf);
-	int _cdecl MsgFunc_ViewModel(const char *pszName, int iSize, void *pbuf);
-	//int  _cdecl MsgFunc_Concuss( const char *pszName, int iSize, void *pbuf );
+	int MsgFunc_Damage(const char *pszName, int iSize, void *pbuf);
+	int MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf);
+	//int MsgFunc_Logo(const char *pszName,  int iSize, void *pbuf);
+	int MsgFunc_ResetHUD(const char *pszName, int iSize, void *pbuf);
+	void MsgFunc_InitHUD(const char *pszName, int iSize, void *pbuf);
+	void MsgFunc_ViewMode(const char *pszName, int iSize, void *pbuf);
+	int MsgFunc_SetFOV(const char *pszName, int iSize, void *pbuf);
+	int MsgFunc_ViewModel(const char *pszName, int iSize, void *pbuf);
+	//int MsgFunc_Concuss( const char *pszName, int iSize, void *pbuf );
 	// Screen information
 	SCREENINFO m_scrinfo;
 

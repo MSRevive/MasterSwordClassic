@@ -87,3 +87,6 @@ public:
 
 	static int mapDarkenLevel; //Map's custom bloom darkening MiB 31_DEC2010
 };
+
+void DLLAttach(HINSTANCE hinstDLL);
+void DLLDetach();

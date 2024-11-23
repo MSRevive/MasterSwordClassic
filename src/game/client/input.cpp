@@ -37,6 +37,7 @@ extern "C"
 #include "vgui_teamfortressviewport.h"
 #include "clientlibrary.h"
 #include "scriptmgr.h"
+#include "ms/clglobal.h"
 
 extern "C"
 {
@@ -1154,4 +1155,8 @@ void DLLEXPORT HUD_Shutdown(void)
 	ScriptMgr::GameShutdown();
 	gClient.Shutdown();
 	ShutdownInput();
+
+#ifndef _WIN32
+	DLLDetach();
+#endif
 }

@@ -9,13 +9,13 @@
 #include "cl_util.h"
 #include "vgui_teamfortressviewport.h"
 
-#include "vgui_actionsignal.h"
+#include "VGUI_ActionSignal.h"
 #include "vgui_voice_tweakdlg.h"
-#include "vgui_panel.h"
-#include "vgui_scrollbar.h"
-#include "vgui_slider.h"
+#include "VGUI_Panel.h"
+#include "VGUI_ScrollBar.h"
+#include "VGUI_Slider.h"
 #include "ivoicetweak.h"
-#include "vgui_button.h"
+#include "VGUI_Button.h"
 #include "vgui_checkbutton2.h"
 #include "vgui_helpers.h"
 

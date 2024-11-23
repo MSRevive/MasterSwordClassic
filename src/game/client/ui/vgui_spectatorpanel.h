@@ -12,9 +12,9 @@
 #ifndef SPECTATORPANEL_H
 #define SPECTATORPANEL_H
 
-#include <vgui_panel.h>
-#include <vgui_label.h>
-#include <vgui_button.h>
+#include <VGUI_Panel.h>
+#include <VGUI_Label.h>
+#include <VGUI_Button.h>
 
 class ColorButton : public CommandButton
 {

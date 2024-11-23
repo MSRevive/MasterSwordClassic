@@ -128,7 +128,7 @@ static int g_NumReses = sizeof(g_ResArray);
 static std::vector<byte> LoadFileByResolution(const char *filePrefix, int xRes, const char *filePostfix)
 {
 	// find our resolution in the res array
-	int resNum = std::size(g_ResArray) - 1;
+	int resNum = ARRAYSIZE(g_ResArray) - 1;
 	while (g_ResArray[resNum] > xRes)
 	{
 		resNum--;
@@ -196,15 +196,14 @@ CSchemeManager::CSchemeManager(int xRes, int yRes)
 	memset(tmpSchemes, 0, sizeof(tmpSchemes));
 	int currentScheme = -1;
 	CScheme *pScheme = nullptr;
+	// record what has been entered so we can create defaults from the different values
+	bool hasFgColor, hasBgColor, hasArmedFgColor, hasArmedBgColor, hasMouseDownFgColor, hasMouseDownBgColor = false;
 
 	if (fileContents.empty())
 	{
 		gEngfuncs.Con_DPrintf("Unable to find *_textscheme.txt\n");
 		goto buildDefaultFont;
 	}
-
-	// record what has been entered so we can create defaults from the different values
-	bool hasFgColor, hasBgColor, hasArmedFgColor, hasArmedBgColor, hasMouseDownFgColor, hasMouseDownBgColor = false;
 
 	pFile = gEngfuncs.COM_ParseFile(pFile, token);
 	while (strlen(token) > 0 && (currentScheme < numTmpSchemes))
