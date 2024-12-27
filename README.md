@@ -1,12 +1,28 @@
 # Master Sword Rebirth
 The continuation of Master Sword Continued, a total HL1 conversion mod.
 
-## Compiling For Windows
+## Building
+You will need to clone the repository with the flag: ``--recurse-submodules`` to get all the submodules with it.
+
+### Windows
 * Visual Studios 2015 or higher, prefered [Visual Studios 2022](https://visualstudio.microsoft.com/vs/community/).
 * Lastest version of [CMake](https://cmake.org/download/) 3.24 or greater.
 * You can either generate project files by running ``createall.bat`` or manually run CMake by ``cmake -S . -B ./build -A Win32``
 
 Currently the project relies on C++14, but we do plan on upgrading to a newer version.
+
+### Linux
+* Make sure to install the following packages: the below example is for Debian
+```
+sudo dpkg --add-architecture i386
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt update
+sudo apt install -y g++-11-multilib libgcc-s1:i386 libstdc++6:i386 libatomic1:i386 libgl1-mesa-dev:i386
+```
+* Run the follow commands
+	* ``cmake -B ./build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$./cmake/LinuxToolchain.cmake --fresh`` This will configure the cmake project.
+	* ``cmake --build ./build --config Release -j3`` This will build the project.
+
 
 ## Troubleshooting
 Please see the [Valve Dev Wiki](https://developer.valvesoftware.com/wiki/Source_SDK_2013#Troubleshooting).
