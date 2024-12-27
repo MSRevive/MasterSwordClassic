@@ -304,7 +304,7 @@ public:
 	bool Container_IsOpen();
 	float Volume();
 
-	CGenericItem *m_pParentContainer;
+	CGenericItem *m_pParentContainer = nullptr;
 
 	//Drinkables
 	void RegisterDrinkable();

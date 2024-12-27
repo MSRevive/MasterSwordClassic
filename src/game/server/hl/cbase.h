@@ -385,7 +385,7 @@ public:
 
 	// Constructor.  Set engine to use C/C++ callback functions
 	// pointers to engine data
-	entvars_t *pev; // Don't need to save/restore this pointer, the engine resets it
+	entvars_t *pev = nullptr; // Don't need to save/restore this pointer, the engine resets it
 
 	// path corners
 	CBaseEntity *m_pGoalEnt; // path corner we are heading towards

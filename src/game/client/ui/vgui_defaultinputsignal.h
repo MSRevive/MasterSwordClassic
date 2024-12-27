@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include "vgui_inputsignal.h"
+#include "VGUI_InputSignal.h"
 
 namespace vgui
 {

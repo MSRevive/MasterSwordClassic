@@ -673,7 +673,9 @@ bool CGenericItem::Deploy()
 	Params.clear();
 
 	Params.add(EntToString(this));
-	Params.add(STRING(m_Hand));
+
+	// a1ba: commented out, as m_Hand isn't a string_t anymore but an enum
+	//Params.add(STRING(m_Hand));
 	m_pOwner->CallScriptEvent("game_equipped", &Params);
 #endif
 

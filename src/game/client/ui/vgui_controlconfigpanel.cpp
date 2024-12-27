@@ -1,14 +1,14 @@
 
 #include <stdio.h>
 #include "vgui_controlconfigpanel.h"
-#include <vgui_headerpanel.h>
-#include <vgui_tablepanel.h>
-#include <vgui_label.h>
-#include <vgui_scrollpanel.h>
-#include <vgui_scheme.h>
-#include <vgui_datainputstream.h>
-#include <vgui.h>
-#include <vgui_textentry.h>
+#include <VGUI_HeaderPanel.h>
+#include <VGUI_TablePanel.h>
+#include <VGUI_Label.h>
+#include <VGUI_ScrollPanel.h>
+#include <VGUI_Scheme.h>
+#include <VGUI_DataInputStream.h>
+#include <VGUI.h>
+#include <VGUI_TextEntry.h>
 
 using namespace vgui;
 

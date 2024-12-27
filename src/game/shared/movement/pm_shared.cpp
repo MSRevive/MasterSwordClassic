@@ -218,7 +218,7 @@ static char grgchTextureType[CTEXTURESMAX];
 
 int g_onladder = 0;
 
-static char* memfgets(const byte* pMemFile, std::size_t fileSize, std::size_t& filePos, char* pBuffer, std::size_t bufferSize)
+char* memfgets(const byte* pMemFile, std::size_t fileSize, std::size_t& filePos, char* pBuffer, std::size_t bufferSize)
 {
 	// Bullet-proofing
 	if (!pMemFile || !pBuffer)

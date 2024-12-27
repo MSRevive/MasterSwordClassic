@@ -16,6 +16,7 @@
 #include "clopengl.h" // OpenGL stuff
 #include "SDL2/SDL_messagebox.h"
 
+#ifdef _WIN32
 // WGL_ARB_extensions_string
 PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB = NULL;
 
@@ -33,6 +34,7 @@ PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = NULL;
 PFNWGLBINDTEXIMAGEARBPROC wglBindTexImageARB = NULL;
 PFNWGLRELEASETEXIMAGEARBPROC wglReleaseTexImageARB = NULL;
 PFNWGLSETPBUFFERATTRIBARBPROC wglSetPbufferAttribARB = NULL;
+#endif // _WIN32
 
 void VectorAngles(const float *forward, float *angles);
 void GenerateInverseMatrix4f(const float inMatrix[4][4], float outInverse[4][4]);
@@ -84,6 +86,7 @@ Vertex g_cubeVertices[] =
 
 #include "logger.h"
 
+#ifdef _WIN32
 typedef struct
 {
 
@@ -96,6 +99,7 @@ HDC OldhDC;
 HGLRC OldhRC;
 
 PBUFFER g_pbuffer;
+#endif
 
 void CRender::RT_GetNewFrameBufferTexture(uint &Tex)
 {
@@ -114,7 +118,7 @@ void CRender::RT_GetNewFrameBufferTexture(uint &Tex)
 
 void CRender::RT_BindTexture()
 {
-
+#ifdef _WIN32
 	if (!wglBindTexImageARB(g_pbuffer.hPBuffer, WGL_FRONT_LEFT_ARB))
 	{
 		//MessageBox(NULL, "Could not bind p-buffer to render texture!", "ERROR", MB_OK | MB_ICONEXCLAMATION);
@@ -123,6 +127,7 @@ void CRender::RT_BindTexture()
 		Print("Could not bind p-buffer to render texture!");
 		//exit(-1);
 	}
+#endif
 }
 
 void CRender::RT_ReleaseTexture()
@@ -131,12 +136,14 @@ void CRender::RT_ReleaseTexture()
 	// released from the dynamic "render-to" texture.
 	//
 
+#ifdef _WIN32
 	if (!wglReleaseTexImageARB(g_pbuffer.hPBuffer, WGL_FRONT_LEFT_ARB))
 	{
 		//MessageBox(NULL, "Could not release p-buffer from render texture!", "ERROR", MB_OK | MB_ICONEXCLAMATION);
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Renderer Error", "Could not release p-buffer from render texture!", NULL);
 		//exit(-1);
 	}
+#endif
 }
 struct gllightinfo_t
 {
@@ -150,6 +157,7 @@ struct gllightinfo_t
 // Copies the GL values used from HL's framebuffer
 void CRender::SyncOffScreenSurface()
 {
+#ifdef _WIN32
 	static bool copied = false;
 
 	//if( !copied )
@@ -184,6 +192,7 @@ void CRender::SyncOffScreenSurface()
 
 	//glClear( GL_DEPTH_BUFFER_BIT );
 	copied = true;
+#endif // _WIN32
 
 	SetRenderTarget(false);
 }
@@ -200,6 +209,7 @@ void CRender::RT_ClearBuffer(bool ClearColor, bool ClearDepth, bool ClearStencil
 }
 void CRender::SetRenderTarget(bool ToTexture, bool ClearDepth)
 {
+#ifdef _WIN32
 	if (ToTexture)
 	{
 		if (!wglMakeCurrent(g_pbuffer.hDC, g_pbuffer.hRC))
@@ -246,6 +256,7 @@ void CRender::SetRenderTarget(bool ToTexture, bool ClearDepth)
 			//exit(-1);
 		}
 	}
+#endif
 }
 
 bool CMirrorMgr::InitMirrors()
@@ -270,11 +281,14 @@ bool CMirrorMgr::InitMirrors()
 		return false;
 	}
 
+#ifdef _WIN32
 	glMultiTexCoord2fARB = (PFNGLMULTITEXCOORD2FARBPROC)wglGetProcAddress("glMultiTexCoord2fARB");
 	glActiveTextureARB = (PFNGLACTIVETEXTUREARBPROC)wglGetProcAddress("glActiveTextureARB");
+#endif
 
 	logfile << Logger::LOG_INFO << "OpenGL ActiveTexture Extention: " << (glActiveTextureARB ? "FOUND" : "NOT FOUND") << "\n";
 
+#ifdef _WIN32
 	if (!glActiveTextureARB) //Doesn't support Multitexturing
 		return false;
 
@@ -435,6 +449,10 @@ bool CMirrorMgr::InitMirrors()
 	m_WorldSurfaces.clearitems(); //Reset world special surfaces
 
 	return true;
+#else
+	logfile << Logger::LOG_WARN << "\nOpenGL mirrors are not implemented on this platform\n";
+	return false;
+#endif
 }
 
 void CRender::CleanupWGL()
@@ -445,7 +463,7 @@ void CRender::CleanupWGL()
 	//
 	// Don't forget to clean up after our p-buffer...
 	//
-
+#ifdef _WIN32
 	if (g_pbuffer.hRC != NULL)
 	{
 		//wglMakeCurrent( g_pbuffer.hDC, g_pbuffer.hRC );
@@ -461,6 +479,7 @@ void CRender::CleanupWGL()
 		ReleaseDC(NULL, g_pbuffer.hDC);
 		g_pbuffer.hDC = NULL;
 	}
+#endif
 }
 
 bool CRender::CheckOpenGL()

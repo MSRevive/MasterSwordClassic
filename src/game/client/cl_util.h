@@ -36,7 +36,7 @@
 		DBG_INPUT;                                                \
 		int ret = 0;                                              \
 		startdbg;                                                 \
-		ret = gHUD.##y.MsgFunc_##x(pszName, iSize, pbuf);         \
+		ret = gHUD.y.MsgFunc_##x(pszName, iSize, pbuf);           \
 		enddbg;                                                   \
 		return ret;                                               \
 	}
@@ -47,7 +47,7 @@
 	{                           \
 		DBG_INPUT;              \
 		startdbg;               \
-		gHUD.##y.UserCmd_##x(); \
+		gHUD.y.UserCmd_##x();   \
 		enddbg;                 \
 	}
 
@@ -58,7 +58,7 @@
 		DBG_INPUT;                                                \
 		int ret = 0;                                              \
 		startdbg;                                                 \
-		ret = gHUD.##y->MsgFunc_##x(pszName, iSize, pbuf);        \
+		ret = gHUD.y->MsgFunc_##x(pszName, iSize, pbuf);          \
 		enddbg;                                                   \
 		return ret;                                               \
 	}
@@ -67,7 +67,7 @@
 	{                            \
 		DBG_INPUT;               \
 		startdbg;                \
-		gHUD.##y->UserCmd_##x(); \
+		gHUD.y->UserCmd_##x();   \
 		enddbg;                  \
 	}
 //------------------------------------------

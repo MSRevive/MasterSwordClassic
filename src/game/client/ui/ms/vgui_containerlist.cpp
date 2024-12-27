@@ -261,12 +261,14 @@ void CContainerPanel::Open(void)
 {
 	//If the button is down, block until its released
 	bool fButtonDown = false;
+#ifdef _WIN32
 	int vKey = VK_LBUTTON;
 	if (GetSystemMetrics(SM_SWAPBUTTON))
 		vKey = VK_RBUTTON;
 	if (HIWORD(GetAsyncKeyState(vKey)))
 		fBlockVGUIMouseButton1 = true;
 	else
+#endif
 		fBlockVGUIMouseButton1 = false;
 
 	VGUI_ContainerPanel::Open();

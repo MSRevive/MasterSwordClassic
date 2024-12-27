@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include "vgui_bitmaptga.h"
+#include "VGUI_BitmapTGA.h"
 
 vgui::BitmapTGA *vgui_LoadTGA(char const *pFilename, bool invertAlpha = true);
 vgui::BitmapTGA *vgui_LoadTGANoInvertAlpha(char const *pFilename);

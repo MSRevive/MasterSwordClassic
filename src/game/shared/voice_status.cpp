@@ -21,7 +21,7 @@
 #include "VGUI_TextImage.h"
 #include "vgui_loadtga.h"
 #include "vgui_helpers.h"
-#include "vgui_mousecode.h"
+#include "VGUI_MouseCode.h"
 #include "filesystem_shared.h"
 
 using namespace vgui;
@@ -847,8 +847,8 @@ void CVoiceStatus::SetPlayerBlockedState(int iPlayer, bool blocked)
 }
 
 //Master Sword
-#include "vgui_TeamFortressViewport.h"
-#include "vgui_ScorePanel.h"
+#include "vgui_teamfortressviewport.h"
+#include "vgui_scorepanel.h"
 void CHLVoiceStatusHelper::GetPlayerTextColor(int entindex, int color[3])
 {
 	color[0] = color[1] = color[2] = 255;

@@ -19,11 +19,11 @@
 // $NoKeywords: $
 //=============================================================================
 
-#include "vgui_font.h"
-#include "vgui_scrollpanel.h"
-#include "vgui_textimage.h"
+#include "VGUI_Font.h"
+#include "VGUI_ScrollPanel.h"
+#include "VGUI_TextImage.h"
 
-#include <vgui_stacklayout.h>
+#include <VGUI_StackLayout.h>
 
 #include "hud.h"
 #include "cl_util.h"

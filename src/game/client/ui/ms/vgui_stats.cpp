@@ -13,7 +13,7 @@
 #include "player/player.h"
 #undef DLLEXPORT
 
-#include <vgui_textimage.h>
+#include <VGUI_TextImage.h>
 
 #include "../hud.h"
 #include "../cl_util.h"

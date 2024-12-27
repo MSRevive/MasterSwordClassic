@@ -19,7 +19,7 @@
 // $NoKeywords: $
 //=============================================================================
 
-#include <vgui_lineborder.h>
+#include <VGUI_LineBorder.h>
 
 #include "hud.h"
 #include "cl_util.h"
@@ -272,12 +272,9 @@ void ScorePanel::Update()
 	gViewPort->GetAllPlayersInfo();
 
 	// Clear out sorts
-	for (int i = 0; i < NUM_ROWS; i++)
-	{
-		m_iSortedRows[i] = 0;
-		m_iIsATeam[i] = TEAM_NO;
-		m_bHasBeenSorted[i] = false;
-	}
+	std::fill(std::begin(m_iSortedRows), std::end(m_iSortedRows), 0);
+	std::fill(std::begin(m_iIsATeam), std::end(m_iIsATeam), TEAM_NO);
+	std::fill(std::begin(m_bHasBeenSorted), std::end(m_bHasBeenSorted), false);
 
 	// If it's not teamplay, sort all the players. Otherwise, sort the teams.
 	if (!gHUD.m_Teamplay)

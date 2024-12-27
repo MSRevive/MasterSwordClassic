@@ -227,9 +227,7 @@ struct createchar_t
 	msstring SteamID; //SteamID (server-side characters)
 };
 
-#ifdef _WIN32
-#include <pshpack1.h>
-#endif
+#pragma pack( push, 1 )
 
 struct clientitem_t : public genericitem_t
 {
@@ -247,9 +245,7 @@ struct scoreinfo_t
 	float fl_healthBuffer;
 };
 
-#ifdef _WIN32
-#include <poppack.h>
-#endif
+#pragma pack( pop )
 
 // -------------
 enum netmsg_e

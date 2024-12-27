@@ -934,18 +934,16 @@ void CMirror::RenderMirroredWorld(int RecurseCall)
 mleaf_t *FindLeaf(Vector &Origin, mnode_t *pNode)
 {
 	if (!pNode)
-		return false;
+		return nullptr;
 
 	mnode_t &Node = *pNode;
 
 	if (Node.contents == CONTENTS_SOLID)
-		return false;
+		return nullptr;
 
 	if (Node.contents < 0)
 	{
 		//Found the resident Leaf
-		mleaf_t &Leaf = *(mleaf_t *)&Node;
-
 		return (mleaf_t *)pNode;
 	}
 
@@ -978,7 +976,7 @@ mleaf_t *FindLeaf(Vector &Origin, mnode_t *pNode)
 			return pLeaf;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 inline bool ParseLeaf(TraverseInfo_t &Info, mleaf_t &Leaf)

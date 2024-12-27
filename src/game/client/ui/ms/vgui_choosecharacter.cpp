@@ -1308,7 +1308,7 @@ void CRenderChar::Render( )
 		}
 		else if( m_AnimState == RCS_IDLE && gpGlobals->time > m_TimeRandomIdle )
 		{
-			m_Ent.PlayAnim( MSCLGlobals::DefaultHUDCharAnims.Fidget );
+			m_Ent.PlayAnim( MSCLGlobals::DefaultHUDCharAnims.Fidget.c_str() );
 			m_AnimState = RCS_FIDGET;
 		}
 
@@ -1365,7 +1365,7 @@ void CRenderChar::PlayAttnAnim( )
 			if( !FBitSet( player.m_CharInfo[m_Idx].GearInfo[i].Flags,GEARFL_WEARING ) ) { m_ItemInHand = true; break; }
 
 
-	m_Ent.PlayAnim( m_ItemInHand ? MSCLGlobals::DefaultHUDCharAnims.Idle_Weapon : MSCLGlobals::DefaultHUDCharAnims.Idle_NoWeapon );
+	m_Ent.PlayAnim( m_ItemInHand ? MSCLGlobals::DefaultHUDCharAnims.Idle_Weapon.c_str() : MSCLGlobals::DefaultHUDCharAnims.Idle_NoWeapon.c_str() );
 	m_AnimState = RCS_IDLE;
 	m_TimeRandomIdle = gpGlobals->time + RANDOM_FLOAT(TIME_MINIDLE,TIME_MAXIDLE);
 	m_ReturnToAttention = false;
@@ -1385,9 +1385,9 @@ void CRenderChar::SetActive( bool Active )
 	else
 	{
 		if( player.m_CharSend.Index == m_Idx && player.m_CharSend.Status == CSS_SENDING )
-			m_Ent.PlayAnim( MSCLGlobals::DefaultHUDCharAnims.Uploading );
+			m_Ent.PlayAnim( MSCLGlobals::DefaultHUDCharAnims.Uploading.c_str() );
 		else
-			m_Ent.PlayAnim( MSCLGlobals::DefaultHUDCharAnims.Inactive );
+			m_Ent.PlayAnim( MSCLGlobals::DefaultHUDCharAnims.Inactive.c_str() );
 		m_AnimState = RCS_INACTIVE;
 		SetBits( m_Ent.curstate.colormap, MSRDR_LIGHT_DIM );
 	}
@@ -1397,7 +1397,7 @@ void CRenderChar::Highlight( bool Highlighted )
 	m_Highlighted = Highlighted;
 	if( Highlighted )
 	{
-		m_Ent.PlayAnim( MSCLGlobals::DefaultHUDCharAnims.Highlighted );
+		m_Ent.PlayAnim( MSCLGlobals::DefaultHUDCharAnims.Highlighted.c_str() );
 		m_AnimState = RCS_HIGHLIGHT;
 		//m_Ent.PlayAnim( ANIM_JUMP );
 	}

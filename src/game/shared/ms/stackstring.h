@@ -167,6 +167,7 @@ public:
 #define msstring_error ((size_t)-1)
 
 typedef const char *msstring_ref;
+struct string_i;
 
 class msstring
 {
@@ -175,13 +176,15 @@ public:
 	msstring(const msstring_ref a);
 	msstring(const msstring_ref a, size_t length);
 	msstring(const msstring &a);
+	msstring(const string_i &a);
 	msstring &operator=(const msstring_ref a);
 	msstring &operator=(int a);
 	msstring &operator=(const msstring &a);
 	msstring &operator+=(const msstring_ref a);
 	msstring &operator+=(int a);
 	msstring operator+(const msstring_ref a);
-	msstring operator+(msstring &a);
+	msstring operator+(const msstring &a);
+	msstring operator+(const string_i &a);
 	msstring operator+(int a);
 	bool operator==(char *a) const;
 	bool operator==(const char *a) const;

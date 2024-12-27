@@ -6,6 +6,7 @@
 #include "gamerules/teams.h"
 #include "mscharacterheader.h"
 #include "buildcontrol.h"
+#include "monsters/msmonster.h"
 
 // Char Files
 enum chardatastatus_e
