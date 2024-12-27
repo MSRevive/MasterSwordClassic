@@ -5,6 +5,7 @@ on:
 
 env:
   BUILD_TYPE: release
+  VCPKG_ROOT: ${{github.workspace}}/vcpkg
 
 jobs:
   build:
@@ -22,6 +23,13 @@ jobs:
           sudo apt install -y g++-11-multilib libgcc-s1:i386 libstdc++6:i386 libatomic1:i386 libgl1-mesa-dev:i386
 
       - uses: lukka/get-cmake@latest
+
+      - name: Restore artifacts, setup vcpkg
+        uses: lukka/run-vcpkg@v10
+        with:
+          vcpkgDirectory: '${{env.VCPKG_ROOT}}'
+          runVcpkgInstall: false
+          vcpkgJsonIgnores: "['**/vcpkg/**', '**/vcpkg_config/**', '**/utils/**']"
       
       - name: Configure CMake
         run: > 
@@ -29,7 +37,10 @@ jobs:
           -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/cmake/LinuxToolchain.cmake --fresh
 
       - name: Build
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j3
+
+      - name: Install
+        run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
       - name: Upload Binaries
         uses: actions/upload-artifact@v4
