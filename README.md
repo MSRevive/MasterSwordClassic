@@ -2,11 +2,11 @@
 The continuation of Master Sword Continued, a total HL1 conversion mod.
 
 ## Building
-You will need to clone the repository with the flag: ``--recurse-submodules`` to get all the submodules with it.
+* You will need to clone the repository with the flag: ``--recurse-submodules`` to get all the submodules with it.
+* Lastest version of [CMake](https://cmake.org/download/) 3.24 or greater. Avoid version 3.28 and 3.28.1 because they will fail to download VCPKG dependencies.
 
 ### Windows
 * Visual Studios 2015 or higher, prefered [Visual Studios 2022](https://visualstudio.microsoft.com/vs/community/).
-* Lastest version of [CMake](https://cmake.org/download/) 3.24 or greater.
 * You can either generate project files by running ``createall.bat`` or manually run CMake by ``cmake -S . -B ./build -A Win32``
 
 Currently the project relies on C++14, but we do plan on upgrading to a newer version.
