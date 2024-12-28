@@ -20,7 +20,7 @@ sudo apt update
 sudo apt install -y g++-11-multilib libgcc-s1:i386 libstdc++6:i386 libatomic1:i386 libgl1-mesa-dev:i386
 ```
 * Run the follow commands
-	* ``cmake -B ./build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$./cmake/LinuxToolchain.cmake --fresh`` This will configure the cmake project.
+	* ``cmake -B ./build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=./cmake/LinuxToolchain.cmake --fresh`` This will configure the cmake project.
 	* ``cmake --build ./build --config Release -j3`` This will build the project.
 
 
