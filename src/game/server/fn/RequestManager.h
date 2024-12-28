@@ -1,8 +1,6 @@
 #ifndef MS_REQUEST_MANAGER
 #define MS_REQUEST_MANAGER
 
-#include "steam/steam_api.h"
-#include "steam/steam_gameserver.h"
 #include "HTTPRequest.h"
 #include <vector>
 
@@ -12,9 +10,8 @@ public:
 	CRequestManager() = default;
 	~CRequestManager() = default;
 	void Init();
-	void Think(bool suppressResp = false);
+	void Think(bool skipCallback = false);
 	void Shutdown(void);
-	void SendAndWait(void);
 
 	void Clear(void) { m_vRequests.clear(); }
 	void QueueRequest(HTTPRequest* req);

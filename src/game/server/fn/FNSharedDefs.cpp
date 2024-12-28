@@ -46,31 +46,68 @@ bool FNShared::IsEnabled(void)
 }
 
 // Send validation requests to the FN backend.
-void FNShared::Validate(void)
+bool FNShared::Validate(void)
 {
 	if (IsEnabled() == false)
-		return;
+		return false;
+
+	if (ValidateMap() && ValidateSC())
+		return true;
+
+	return false;
+}
+
+bool FNShared::ValidateFN(void)
+{
+	if (IsEnabled() == false)
+		return true;
+	
+	std::unique_ptr<HTTPRequest> pReq(new ValidateConRequest("/api/v2/internal/ping"));
+	if (pReq.get()->AsyncSendRequest())
+	{
+		JSONDocument& doc = (*pReq.get()->m_JSONResponse);
+		return doc["data"].GetBool();
+	}
+
+	return false;
+}
+
+bool FNShared::ValidateMap(void)
+{
+	if (IsEnabled() == false)
+		return true;
+	
+	char mapFile[MAX_PATH];
+	_snprintf(mapFile, sizeof(mapFile), "%s/maps/%s.bsp", MSGlobals::AbsGamePath.c_str(), MSGlobals::MapName.c_str());
+	unsigned int mapFileHash = GetFileCheckSum(mapFile);
+
+	std::unique_ptr<HTTPRequest> pReq(new ValidateMapRequest(UTIL_VarArgs("/api/v2/internal/map/%s/%u", MSGlobals::MapName.c_str(), mapFileHash)));
+	if (pReq.get()->AsyncSendRequest())
+	{
+		JSONDocument& doc = (*pReq.get()->m_JSONResponse);
+		return doc["data"].GetBool();
+	}
+
+	return false;
+}
+
+bool FNShared::ValidateSC(void)
+{
+	if (IsEnabled() == false)
+		return true;
 
 	char scFile[MAX_PATH];
 	_snprintf(scFile, sizeof(scFile), "%s/dlls/sc.dll", MSGlobals::AbsGamePath.c_str());
 	unsigned int scFileHash = GetFileCheckSum(scFile);
 
-	char mapFile[MAX_PATH];
-	_snprintf(mapFile, sizeof(mapFile), "%s/maps/%s.bsp", MSGlobals::AbsGamePath.c_str(), MSGlobals::MapName.c_str());
-	unsigned int mapFileHash = GetFileCheckSum(mapFile);
+	std::unique_ptr<HTTPRequest> pReq(new ValidateScriptsRequest(UTIL_VarArgs("/api/v2/internal/sc/%u", scFileHash)));
+	if (pReq.get()->AsyncSendRequest())
+	{
+		JSONDocument& doc = (*pReq.get()->m_JSONResponse);
+		return doc["data"].GetBool();
+	}
 
-	g_FNRequestManager.QueueRequest(new ValidateScriptsRequest(UTIL_VarArgs("/api/v2/internal/sc/%u", scFileHash)));
-	g_FNRequestManager.QueueRequest(new ValidateMapRequest(UTIL_VarArgs("/api/v2/internal/map/%s/%u", MSGlobals::MapName.c_str(), mapFileHash)));
-}
-
-void FNShared::ValidateFN(void)
-{
-	if (IsEnabled() == false)
-		return;
-	
-	HTTPRequest* request = new ValidateConnectivityRequest("/api/v2/internal/ping");
-	g_FNRequestManager.QueueRequest(request);
-	//request->SendRequest();
+	return false;
 }
 
 // Check if player has BANNED flag.
@@ -122,7 +159,7 @@ void FNShared::LoadCharacter(CBasePlayer* pPlayer, int slot)
 }
 
 // Create or Update FN character!
-void FNShared::CreateOrUpdateCharacter(CBasePlayer* pPlayer, int slot, uint8* data, size_t size, bool bIsUpdate)
+void FNShared::CreateOrUpdateCharacter(CBasePlayer* pPlayer, int slot, const char* data, size_t size, bool bIsUpdate)
 {
 	if ((pPlayer == NULL) || (pPlayer->steamID64 == 0ULL) || (data == NULL) || (size <= 0) || !IsSlotValid(slot))
 		return; // Quick validation - steamId is vital.

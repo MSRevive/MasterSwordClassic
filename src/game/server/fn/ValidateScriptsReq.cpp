@@ -9,24 +9,23 @@
 #include "global.h"
 
 ValidateScriptsRequest::ValidateScriptsRequest(const char* url) :
-	HTTPRequest(EHTTPMethod::k_EHTTPMethodGET, url)
+	HTTPRequest(HTTPMethod::GET, url)
 {
 }
 
 void ValidateScriptsRequest::OnResponse(bool bSuccessful, int iRespCode)
 {
-	if (bSuccessful == false || pJSONData == NULL)
+	if (bSuccessful == false)
 	{
 		// MSGlobals::CentralEnabled = false;
 		// FNShared::Print("FuzzNet has been disabled!\n");
 		return;
 	}
 
-	const JSONValue& value = (*pJSONData);
-	if (!value["data"].GetBool())
+	JSONDocument& doc = (*m_JSONResponse);
+	if (!doc["data"].GetBool())
 	{
 		FNShared::Print("Script file not verified for FN!\n");
-		MSGlobals::CentralEnabled = false;
 	}
 
 	FNShared::Print("Scripts verified for FN.\n");

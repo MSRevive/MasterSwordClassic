@@ -16,6 +16,11 @@
 #undef ARRAYSIZE
 #endif
 
+#pragma push_macro("SERVER_EXECUTE")
+#ifdef SERVER_EXECUTE
+#undef SERVER_EXECUTE
+#endif
+
 #include <Windows.h>
 
 #endif

@@ -1,0 +1,10 @@
+{
+	"builtin-baseline": "9f5925e81bbcd9c8c34cc7a8bd25e3c557b582b2",
+	"dependencies": [
+		{ 
+			"name": "curl",
+			"version>=": "8.10.1",
+			"default-features": false
+		}
+	]
+}

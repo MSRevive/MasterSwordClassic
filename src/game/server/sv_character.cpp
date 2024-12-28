@@ -480,9 +480,6 @@ void WriteItem(CPlayer_DataBuffer &gFile, genericitem_full_t &Item);
 //If pData != NULL, then this is a new char
 void MSChar_Interface::SaveChar(CBasePlayer *pPlayer, savedata_t *pData)
 {
-	startdbg;
-	dbg("Begin");
-
 	//#ifndef VALVE_DLL
 	//	if( MSGlobals::ServerSideChar )
 	//		return;
@@ -601,8 +598,6 @@ void MSChar_Interface::SaveChar(CBasePlayer *pPlayer, savedata_t *pData)
 	}
 
 	//Save magic spells
-	dbg("Write spells");
-
 	spellgroup_v &SpellList = pPlayer->m_SpellList;
 	gFile.WriteByte(CHARDATA_SPELLS1); //[BYTE - CHUNK - SPELLS]
 	gFile.WriteByte(SpellList.size()); //[BYTE]
@@ -611,7 +606,6 @@ void MSChar_Interface::SaveChar(CBasePlayer *pPlayer, savedata_t *pData)
 		gFile.WriteString(SpellList[s]); //[X STRINGS]
 
 	//Save Items
-	dbg("Write Items");
 	gFile.WriteByte(CHARDATA_ITEMS2); //[BYTE - CHUNK - ITEMS]
 
 	static mslist<CGenericItem *> WriteList;
@@ -718,24 +712,19 @@ void MSChar_Interface::SaveChar(CBasePlayer *pPlayer, savedata_t *pData)
 	
 	if (FNShared::IsEnabled())
 	{
-		dbg("Write to FN");
 		// If Central Server is enabled, save to the Central Server instead of locally
-		FNShared::CreateOrUpdateCharacter(pPlayer, pPlayer->m_CharacterNum, gFile.m_Buffer, gFile.GetFileSize(), (pData == NULL));
+		FNShared::CreateOrUpdateCharacter(pPlayer, pPlayer->m_CharacterNum, (char*)gFile.m_Buffer, gFile.GetFileSize(), (pData == NULL));
 		gFile.Close();
 		return;
 	}
 	else if (!MSGlobals::ServerSideChar)
 	{
-		dbg("Write to client");
 		charinfo_t &CharInfo = pPlayer->m_CharInfo[pPlayer->m_CharacterNum];
-		CharInfo.AssignChar(pPlayer->m_CharacterNum, LOC_CLIENT, (char *)gFile.m_Buffer, gFile.GetFileSize(), pPlayer);
+		CharInfo.AssignChar(pPlayer->m_CharacterNum, LOC_CLIENT, (char*)gFile.m_Buffer, gFile.GetFileSize(), pPlayer);
 		gFile.Close();
 		return;
 	}
 
-	dbg("Write to file");
 	gFile.WriteToFile(pszFileName, "wb", true);
 	gFile.Close();
-
-	enddbg;
 }
