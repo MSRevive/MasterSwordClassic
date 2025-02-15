@@ -529,6 +529,16 @@ void CStudioModelRenderer::StudioSetUpTransform(int trivial_accept)
 
 	cl_entity_t& Ent = *m_pCurrentEntity;
 
+	if (m_pCurrentEntity->model->flags & EF_ROTATE)
+	{
+		float timemod;
+		timemod = fmod(gEngfuncs.GetClientTime(), 2.0f);
+		m_pCurrentEntity->angles[0] = 0;
+		m_pCurrentEntity->angles[YAW] = timemod * 180.0 - 90.0;
+		m_pCurrentEntity->angles[2] = 0;
+		VectorCopy(m_pCurrentEntity->angles, m_pCurrentEntity->curstate.angles);
+	}
+
 	// tweek model origin
 	//angles = m_pCurrentEntity->curstate.angles;
 	angles = Ent.angles;
