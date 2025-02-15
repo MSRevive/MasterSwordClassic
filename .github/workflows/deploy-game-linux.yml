@@ -36,4 +36,5 @@ jobs:
         with:
           name: linux-x86
           path: |
-            ${{github.workspace}}/bins/release/*.so
+            ${{github.workspace}}/build/src/game/client/client.so
+            ${{github.workspace}}/build/src/game/server/ms.so
