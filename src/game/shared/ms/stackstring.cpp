@@ -15,7 +15,7 @@ msstring::msstring(const msstring_ref a, size_t length)
 	data[length] = 0;
 }
 msstring::msstring(const msstring &a) { operator=(a); }
-msstring::msstring(const string_i &a) { operator=(a); }
+msstring::msstring(const string_i &a) { operator=(&a); }
 msstring &msstring::operator=(const msstring_ref a)
 {
 	if (a == data)
