@@ -323,6 +323,16 @@ typedef struct
 } mstudiotrivert_t;
 #endif
 
+// model flags
+#define	EF_ROCKET	1
+#define	EF_GRENADE	2
+#define	EF_GIB		4
+#define	EF_ROTATE	8
+#define	EF_TRACER	16
+#define	EF_ZOMGIB	32
+#define	EF_TRACER2	64
+#define	EF_TRACER3	128
+
 // lighting options
 #define STUDIO_NF_FLATSHADE		0x0001
 #define STUDIO_NF_CHROME		0x0002
