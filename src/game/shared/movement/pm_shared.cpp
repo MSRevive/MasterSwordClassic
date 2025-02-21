@@ -35,6 +35,8 @@
 #include "player/player.h"
 #include "filesystem_shared.h"
 
+extern "C" vec3_t vec3_origin;
+
 //Dogg -- Ripped from mathlib.h
 extern "C"
 {

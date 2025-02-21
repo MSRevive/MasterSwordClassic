@@ -104,7 +104,11 @@ namespace Tartan
 		GLubyte IDData[256];
 		if (tgaheader.identsize)
 		{
+#ifdef min
+			if (!File.Read(IDData, min((int)tgaheader.identsize, 256)))
+#else
 			if (!File.Read(IDData, std::min((int)tgaheader.identsize, 256)))
+#endif
 			{
 				File.Close();
 				return false;
