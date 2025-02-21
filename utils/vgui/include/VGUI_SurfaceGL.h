@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
+//========= Copyright Â© 1996-2002, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -38,7 +38,6 @@ typedef unsigned short wchar_t;
 #endif
 
 #include <GL/gl.h>
-#include <GL/glu.h>
 
 #ifdef VGUI_APIENTRY_DEFINED
 # undef VGUI_APIENTRY_DEFINED

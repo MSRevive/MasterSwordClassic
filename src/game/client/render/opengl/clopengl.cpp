@@ -220,29 +220,6 @@ void CRender::SetRenderTarget(bool ToTexture, bool ClearDepth)
 		}
 		if (ClearDepth)
 			glClear(GL_DEPTH_BUFFER_BIT);
-		/*
-		//TEST:  Force the view and draw a cube.  It tests current GL properties such as lighting
-		
-		glMatrixMode( GL_PROJECTION );
-		glLoadIdentity();
-		gluPerspective( 45.0, (GLdouble)m_RT_Width / (GLdouble)m_RT_Height, 0.1, 1000.0);
-
-		glMatrixMode( GL_MODELVIEW );
-		glLoadIdentity();
-
-		LoadGLTexture( "hey.tga", id );		//call load each frame... takes advantage of the texture caching
-		glBindTexture( GL_TEXTURE_2D, id );
-		glTranslatef( 0.0f, 0.0f, -5.0f );
-		glRotatef( -30, 1.0f, 0.0f, 0.0f );
-		glRotatef( -30, 0.0f, 1.0f, 0.0f );
-
-		//
-		// Now the render the cube to the p-buffer just like you we would have 
-		// done with the regular window.
-		//
-
-		glInterleavedArrays( GL_T2F_V3F, 0, g_cubeVertices );
-		glDrawArrays( GL_QUADS, 0, 24 );*/
 	}
 	else
 	{
