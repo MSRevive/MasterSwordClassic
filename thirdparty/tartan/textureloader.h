@@ -17,9 +17,6 @@ struct loadtex_t
 namespace Tartan
 {
 	bool LoadTextureFile(const char *sFilePath, loadtex_t &LoadTex); //!< Load texture file in sFilePath, returns OpenGL textureid in textureid
-	bool LoadMissingTexture(int &iTextureID);						 //!< Loads missing texture texture into textureid
-
-	//bool LoadTexturePCX( int &iReturnedTextureID, const char *sFilepath ); //!< Load pcx texture file in sFilePath, returns OpenGL textureid in textureid
 	bool LoadTextureTGA(const char *sFilepath, loadtex_t &LoadTex); //!< Load tga texture file in sFilePath, returns OpenGL textureid in textureid
 }
 
