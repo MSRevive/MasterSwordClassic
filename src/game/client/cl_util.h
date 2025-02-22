@@ -199,7 +199,9 @@ void VectorScale(const float *in, float scale, float *out);
 float VectorNormalize(float *v);
 void VectorInverse(float *v);
 
-extern vec3_t vec3_origin;
+// ugh, some bits of the client code expect a float[3] while others expect a Vector, and there's a macro that pretends they're the same
+// handle the extern with the correct types in the places where it's required
+// extern vec3_t vec3_origin;
 
 // disable 'possible loss of data converting float to int' warning message
 #pragma warning(disable : 4244)

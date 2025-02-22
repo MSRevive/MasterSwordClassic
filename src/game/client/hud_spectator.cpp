@@ -32,6 +32,8 @@
 #include "logger.h"
 #include "filesystem_shared.h"
 
+extern "C" float* vec3_origin;
+
 #pragma warning(disable : 4244)
 
 extern "C" int iJumpSpectator;
