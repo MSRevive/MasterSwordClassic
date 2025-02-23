@@ -12,15 +12,6 @@
 #include "VGUI_InputStream.h"
 #include "filesystem_shared.h"
 
-//Deuplicated from msdebug.h
-// #ifdef DEV_BUILD
-// void *operator new(size_t size, const char *pszSourceFile, int LineNum);
-// void operator delete(void *ptr, const char *pszSourceFile, int LineNum);
-// #define msnew new (__FILE__, __LINE__)
-// #else
-// #define msnew new
-// #endif
-
 // ---------------------------------------------------------------------- //
 // Helper class for loading tga files.
 // ---------------------------------------------------------------------- //

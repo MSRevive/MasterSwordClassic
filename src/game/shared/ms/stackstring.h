@@ -119,12 +119,6 @@ public:
 		unalloc();
 		m_First = pNewItems;
 	}
-	void unalloc()
-	{
-		if (m_First)
-			delete[] m_First;
-		m_First = (itemtype_y *)0;
-	}
 	void reserve(size_t Items)
 	{
 		while (m_ItemsAllocated < Items)
@@ -151,14 +145,14 @@ public:
 
 		return *this;
 	}
-	itemtype_y *FirstItem()
+private:
+	void unalloc()
 	{
-		return m_First;
+		if (m_First)
+			delete[] m_First;
+		m_First = (itemtype_y*)0;
 	}
 };
-
-// we shouldn't be overriding vector with mslist
-//#define vector mslist
 
 //mstring - A fast string with features... no dynamic allocation
 //-Dogg
@@ -218,19 +212,6 @@ protected:
 	char data[MSSTRING_SIZE];
 };
 
-/*class str256 : public msstring
-{
-public:
-	str256( ) { init( ); }
-	str256( const msstring_ref a ) { init( ); msstring::operator = ( a ); }
-	str256( const msstring_ref a, size_t length ) { init( ); append( a, length ); }
-	str256( const msstring &a ) { init( ); msstring::operator = ( a ); }
-
-	void init( ) { data = m_Data; }
-	char m_Data[256];
-};
-#define msstring str256*/
-
 typedef mslist<msstring> msstringlist;
 
 bool TokenizeString(msstring_ref pszString, msstringlist &Tokens, msstring_ref Separator);
@@ -277,7 +258,6 @@ public:
 	void SetFromString(msstring_ref a);
 	void SetFromInt(int a);
 	void SetFromFloat(float a);
-	void SetType(type Type) { m_Type = Type; }
 
 	operator int() { return m_Int; }
 	operator float() { return m_Float; }
@@ -287,15 +267,9 @@ public:
 typedef std::map<msstring,msstring> msstringstringhash;
 
 namespace strutil {
-	//this type has to be a mslist 'cause thanks msc.
-	mslist<std::string> explode(std::string const &str, char delim);
-	std::string& implode(mslist<std::string> vec, int start = 0);
-	//std::string& removeWhiteSpace(std::string &str);
 	bool isSpace(const char &ch);
-	void tolower(char *str);
 	bool isBadChar(int c);
 	char* stripBadChars(char *data);
-	bool isBadStr(char *str);
 }
 
 #endif // STACKSTRING_H

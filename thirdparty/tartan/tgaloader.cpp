@@ -7,9 +7,6 @@
 /			LoadUncompressedTGA(Texture * texture, char * filename, FILE * fTGA)*	
 /*******************************************************************************/
 
-//#include "stream_safe.h"
-//using namespace std;
-
 #include "tgastruct.h"
 
 #include <GL/gl.h>	  // Header File For The OpenGL32 Library
@@ -22,7 +19,7 @@ using namespace Tartan;
 namespace Tartan
 {
 
-	/********************************************************************************
+/********************************************************************************
 /name :		LoadTGA(Texture * texture, char * filename)							*
 /function:  Open and test the file to make sure it is a valid TGA file			*	
 /parems:	texture, pointer to a Texture structure								*
