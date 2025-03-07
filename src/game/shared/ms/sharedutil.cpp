@@ -162,22 +162,6 @@ char *GetFullResourceName(msstring_ref pszPartialName)
 	return sReturn;
 }
 
-void *MSCopyClassMemory(void *pDest, void *pSource, size_t Length)
-{
-	long lFirstPtr = *(long *)pDest;
-	void *pReturn = memcpy(pDest, pSource, Length);
-	*(long *)pDest = lFirstPtr;
-	return pReturn;
-}
-
-void *MSZeroClassMemory(void *pDest, size_t Length)
-{
-	long lFirstPtr = *(long *)pDest;
-	void* pReturn = memset(pDest, 0, Length);
-	*(long *)pDest = lFirstPtr;
-	return pReturn;
-}
-
 inline CBaseEntity *PrivData(entvars_t *pev) { return (CBaseEntity *)pev->pContainingEntity; }
 
 CBaseEntity *MSInstance(entvars_t *pev)
@@ -207,34 +191,6 @@ CBaseEntity *MSInstance(edict_t *pent)
 
 int iBeam;
 
-Vector GetHighBone(entvars_t *pev, int Bone)
-{
-	//Bones positions above the waist are way off so this tries to get it close
-	//Y needs to be rotated +/- 120 degrees and the
-	//engine swaps the X and Z values so you have to compensate for that
-	//	ALERT( at_console, "x: %f\n", pev->angles.x );
-	Vector vTemp1 = Vector(0, 0, 0);
-	float yrot = 124;
-	float oldx = pev->angles.x;
-	float oldz = pev->angles.z;
-	if (oldx < 0)
-		pev->angles.x *= 1.2;
-	else
-		pev->angles.x /= -16;
-
-	pev->angles.y += yrot;
-	if (oldx < 0)
-		pev->angles.z = -oldx * 1.5;
-	else
-		pev->angles.z = -oldx;
-
-	GET_BONE_POSITION(ENT(pev), Bone, vTemp1, NULL);
-	pev->angles.x = oldx;
-	pev->angles.y -= yrot;
-	pev->angles.z = oldz;
-
-	return vTemp1;
-}
 void BeamEffect(float SRCx, float SRCy, float SRCz, float DESTx,
 				float DESTy, float DESTz, int sprite, int startframe,
 				int framerate, int life, int width, int noise,
@@ -270,47 +226,12 @@ void BeamEffect(Vector vStart, Vector vEnd, int sprite, int startframe,
 			   brightness, ispeed);
 }
 
-BOOL UTIL_IsPointWithinEntity(Vector &vPoint, CBaseEntity *pEntity)
-{
-	if (vPoint.x > pEntity->pev->absmax.x ||
-		vPoint.y > pEntity->pev->absmax.y ||
-		vPoint.z > pEntity->pev->absmax.z ||
-		vPoint.x < pEntity->pev->absmin.x ||
-		vPoint.y < pEntity->pev->absmin.y ||
-		vPoint.z < pEntity->pev->absmin.z)
-		return FALSE;
-	return TRUE;
-}
-/*int power( int exponent, int basenum ) {
-	int i, ireturn = 1;
-	for( i = 0; i < exponent; i++ ) ireturn *= basenum;
-	return ireturn;
-}*/
 int numofdigits(int x)
 {
 	int idigits = 1;
 	while (x >= pow(10, idigits) && idigits < 256)
 		idigits++;
 	return idigits;
-}
-void SpriteEffect(CBaseEntity *pEntity, int Effect, char *cSprite)
-{
-#ifdef VALVE_DLL
-	int iSprite = PRECACHE_MODEL(cSprite);
-	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-
-	WRITE_BYTE(Effect);
-	WRITE_SHORT(pEntity->entindex()); // entity
-	WRITE_SHORT(iSprite);			  // sprite model
-	WRITE_BYTE(20);					  // life
-	WRITE_BYTE(5);					  // width
-	WRITE_BYTE(224);				  // r, g, b
-	WRITE_BYTE(224);				  // r, g, b
-	WRITE_BYTE(255);				  // r, g, b
-	WRITE_BYTE(255);				  // brightness
-
-	MESSAGE_END(); // move PHS/PVS data sending into here (SEND_ALL, SEND_PVS, SEND_PHS)
-#endif
 }
 
 #ifndef _WIN32
@@ -323,11 +244,6 @@ extern "C" char *strlwr(char *str)
 	return orig;
 }
 #endif
-
-/*bool string_i::operator == ( msstring_ref a ) const
-{
-	return FStrEq( EngineFunc::GetString( m_string ), a ) ? true : false;
-}*/
 
 void ErrorPrint(msstring vsUnqeTag, int vFlags, const char *szFmt, ...)
 {

@@ -20,6 +20,7 @@
 
 */
 
+#include <climits>
 #include <cmath>
 #include "msdllheaders.h"
 #include "trains.h"
@@ -3944,8 +3945,8 @@ void CBasePlayer::UpdateClientData(void)
 		}
 
 		MESSAGE_BEGIN(MSG_ONE, Msg, NULL, pev);
-		if (Amt > (signed short)(MAXSHORT / 2))
-			Amt = (MAXSHORT / 2);
+		if (Amt > (signed short)(SHRT_MAX / 2))
+			Amt = (SHRT_MAX / 2);
 		WRITE_SHORT(Amt);
 		WRITE_BYTE(Type);
 		MESSAGE_END();
@@ -3976,7 +3977,7 @@ void CBasePlayer::UpdateClientData(void)
 			continue;
 
 		MESSAGE_BEGIN( MSG_ONE, Msg, NULL, pev );
-			if( Amt > (signed short)(MAXSHORT/2) ) Amt = (MAXSHORT/2);
+			if( Amt > (signed short)(SHRT_MAX/2) ) Amt = (SHRT_MAX/2);
 			WRITE_SHORT( Amt ); WRITE_BYTE( Type );
 		MESSAGE_END();
 
