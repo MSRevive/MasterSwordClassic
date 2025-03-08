@@ -29,6 +29,8 @@
 #include	"svglobals.h"
 #include	"mscharacter.h"
 
+#include <climits>
+
 extern DLL_GLOBAL CGameRules	*g_pGameRules;
 extern DLL_GLOBAL BOOL	g_fGameOver;
 extern int gmsgDeathMsg;	// client dll messages
@@ -1697,7 +1699,7 @@ BOOL CHalfLifeMultiplay :: ClientCommand( CBasePlayer *pPlayer, const char *pcmd
 				}
 			}
 			else {
-				pTeam = CTeam::CreateTeam( Name, RANDOM_LONG(0,MAXLONG) );
+				pTeam = CTeam::CreateTeam( Name, RANDOM_LONG(0, LONG_MAX) );
 				//pPlayer->SendInfoMsg( "You are now the leader of %s\n", Name );
 				msstring CreateMsg = msstring("You are now the leader of ") + pTeam->m_TeamName;
 				pPlayer->SendHUDMsg( "Party", CreateMsg );

@@ -2,6 +2,8 @@
 #include "player/player.h"
 #include "teams.h"
 
+#include <climits>
+
 extern int gmsgTeamInfo;
 mslist<CTeam *> CTeam::Teams;
 
@@ -20,7 +22,7 @@ CTeam *CTeam::CreateTeam(const char *pszName, ulong ID)
 	CTeam &NewTeam = *msnew CTeam;
 	strncpy(NewTeam.m_TeamName, pszName, MAX_TEAMNAME_LEN);
 	NewTeam.m_TeamName[MAX_TEAMNAME_LEN] = 0;
-	NewTeam.m_ID = RANDOM_LONG(0, MAXLONG); //Assign Unique ID
+	NewTeam.m_ID = RANDOM_LONG(0, LONG_MAX); //Assign Unique ID
 
 	Teams.add(&NewTeam);
 
