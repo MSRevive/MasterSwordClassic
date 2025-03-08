@@ -49,7 +49,7 @@ int g_ItemRemovalStatus;
 globalscriptinfo_t g_MSScriptTypes[] =
 {
 	{MS_SCRIPT_UKNOWN, "unknown"},
-	{MS_SCRIPT_LIBRARY, "sc.dll"},
+	{MS_SCRIPT_LIBRARY, "pak0.pak"},
 	{MS_SCRIPT_DIR, "/scripts"},
 },
 * g_MSScriptInfo = &g_MSScriptTypes[0];
@@ -395,10 +395,9 @@ void CGenericItemMgr::GenericItemPrecache(void)
 	{
 #endif
 
-		//If Public build or /scripts/items.txt failed in the dev build, try /dlls/sc.dll
-		//CGroupFile &GroupFile = *msnew CGroupFile();
+		//If Public build or /scripts/items.txt failed in the dev build, try /pak0.pak
 		CGameGroupFile GroupFile;
-		GroupFile.Open("dlls/sc.dll");
+		GroupFile.Open("pak0.pak");
 		ulong FileSize;
 		if (GroupFile.ReadEntry(FILE_ITEMLIST, NULL, FileSize))
 		{
@@ -416,7 +415,7 @@ void CGenericItemMgr::GenericItemPrecache(void)
 			ALERT(at_console, "NONEXISTANT file: \"%s\"\nTHIS FILE IS EXTREMELY IMPORTANT. WHY IS IT MISSING?\n", FILE_DEV_ITEMLIST);
 #else
 			//Fatal error in public build... couldn't find items.txt
-			Log("FATAL ERROR: items.txt inside sc.dll NOT FOUND!");
+			Log("FATAL ERROR: items.txt inside pak0.pak NOT FOUND!");
 
 #ifdef RELEASE_LOCKDOWN
 			exit(0);

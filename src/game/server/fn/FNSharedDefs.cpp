@@ -52,7 +52,7 @@ void FNShared::Validate(void)
 		return;
 
 	char scFile[MAX_PATH];
-	_snprintf(scFile, sizeof(scFile), "%s/dlls/sc.dll", MSGlobals::AbsGamePath.c_str());
+	_snprintf(scFile, sizeof(scFile), "%s/pak0.pak", MSGlobals::AbsGamePath.c_str());
 	unsigned int scFileHash = GetFileCheckSum(scFile);
 
 	char mapFile[MAX_PATH];
