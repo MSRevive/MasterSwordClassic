@@ -33,6 +33,8 @@
 
 #include <string.h>
 
+extern "C" float* vec3_origin;
+
 static int tracerCount[32];
 
 void V_PunchAxis(int axis, float punch);

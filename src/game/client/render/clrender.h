@@ -316,7 +316,6 @@ void RenderModel(cl_entity_t *pEntity);
 #define SURF_UNDERWATER 0x80
 
 #include <GL/gl.h>	  // Header File For The OpenGL32 Library
-#include <GL/glu.h>	  // Header File For The GLu32 Library
 #include <GL/glext.h>
 
 #ifdef _WIN32

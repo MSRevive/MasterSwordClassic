@@ -1,6 +1,6 @@
 # Based off Solokiller's Half Life Unified SDK, modified for MSR
 # https://github.com/twhl-community/halflife-unified-sdk
-cmake_minimum_required( VERSION 3.23 )
+cmake_minimum_required( VERSION 3.24 )
 
 if (WIN32)
 	set(CMAKE_GENERATOR_PLATFORM win32)
@@ -82,7 +82,7 @@ function(set_common_properties TARGET_NAME)
 			# Note: the pentium-m arch setting is not used for AMD systems in the original makefile
 			# Since the arch settings used are i686 this means including the setting ensures original settings are used,
 			# but it could cause problems for AMD targets
-			$<$<CXX_COMPILER_ID:GNU>:-fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -Wno-write-strings -Wno-pointer-arith -march=pentium-m -mfpmath=387>
+			$<$<CXX_COMPILER_ID:GNU>:-fpermissive -fno-strict-aliasing -Wno-invalid-offsetof -Wno-write-strings -Wno-pointer-arith -Wno-narrowing -march=pentium-m -mfpmath=387>
 
 			# flifetime-dse=1 is needed to disable a compiler optimization that optimizes out std::memset calls in CBaseEntity::operator new
 			# See https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-flifetime-dse for more information about this flag

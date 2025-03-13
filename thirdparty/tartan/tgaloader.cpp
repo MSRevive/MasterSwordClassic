@@ -7,13 +7,9 @@
 /			LoadUncompressedTGA(Texture * texture, char * filename, FILE * fTGA)*	
 /*******************************************************************************/
 
-//#include "stream_safe.h"
-//using namespace std;
-
 #include "tgastruct.h"
 
 #include <GL/gl.h>	  // Header File For The OpenGL32 Library
-#include <GL/glu.h>	  // Header File For The GLu32 Library
 
 #include "msfileio.h"
 #include "textureloader.h"
@@ -23,7 +19,7 @@ using namespace Tartan;
 namespace Tartan
 {
 
-	/********************************************************************************
+/********************************************************************************
 /name :		LoadTGA(Texture * texture, char * filename)							*
 /function:  Open and test the file to make sure it is a valid TGA file			*	
 /parems:	texture, pointer to a Texture structure								*
@@ -104,7 +100,11 @@ namespace Tartan
 		GLubyte IDData[256];
 		if (tgaheader.identsize)
 		{
+#ifdef min
+			if (!File.Read(IDData, min((int)tgaheader.identsize, 256)))
+#else
 			if (!File.Read(IDData, std::min((int)tgaheader.identsize, 256)))
+#endif
 			{
 				File.Close();
 				return false;

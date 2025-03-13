@@ -15,7 +15,13 @@ msstring::msstring(const msstring_ref a, size_t length)
 	data[length] = 0;
 }
 msstring::msstring(const msstring &a) { operator=(a); }
+
+#ifdef _WIN32
 msstring::msstring(const string_i &a) { operator=(a); }
+#else
+msstring::msstring(const string_i& a) { operator=(&a); }
+#endif // _WIN32
+
 msstring &msstring::operator=(const msstring_ref a)
 {
 	if (a == data)
@@ -43,7 +49,7 @@ msstring &msstring::operator+=(int a)
 }
 msstring msstring::operator+(const msstring_ref a) { return msstring(data) += a; }
 msstring msstring::operator+(const msstring &a) { return msstring(data) += a.data; }
-msstring msstring::operator+(const string_i &a) { return msstring(data) += a.c_str(); }
+msstring msstring::operator+(const string_i &a) { return msstring(data) += ((string_i)a).c_str(); }
 msstring msstring::operator+(int a) { return msstring(data) += a; }
 bool msstring::operator==(char *a) const { return !strcmp(data, a); }
 bool msstring::operator==(const char *a) const { return !strcmp(data, a); }
@@ -193,40 +199,6 @@ void msvariant::SetFromFloat(float a)
 	m_Float = a;
 }
 
-mslist<std::string> strutil::explode(std::string const &str, char delim)
-{
-	mslist<std::string> result;
-	std::istringstream iss(str);
-
-	for (std::string token; std::getline(iss, token, delim); )
-	{	
-		if (!token.empty())
-			result.push_back(std::move(token));
-	}
-
-	return result;
-}
-
-std::string& strutil::implode(mslist<std::string> vec, int start)
-{
-	static std::string result;
-	result.clear();
-
-	for (int i = start; i < vec.size(); i++)
-		result += vec[i];
-
-	return result;
-}
-
-// std::string& strutil::removeWhiteSpace(std::string &str)
-// {
-// 	str.erase(std::unique(std::begin(str), std::end(str), [](unsigned char a, unsigned char b){
-// 		return isSpace(a) && isSpace(b);
-// 	}), std::end(str));
-
-// 	return str;
-// }
-
 bool strutil::isSpace(const char &ch)
 {
 	switch(ch)
@@ -239,16 +211,6 @@ bool strutil::isSpace(const char &ch)
 		return true;
 	default:
 		return false;
-	}
-}
-
-void strutil::tolower(char* str)
-{
-	char* target = str;
-	while (*target != '\0')
-	{
-		(*target) = ::tolower(*target);
-		target++;
 	}
 }
 
@@ -271,16 +233,4 @@ char* strutil::stripBadChars(char* data)
 
 	cleanData[x] = '\0';
 	return cleanData;
-}
-
-bool strutil::isBadStr(char* str)
-{
-	char* target = str;
-	while (*target != '\0')
-	{
-		if (isBadChar(*target))
-			return true;
-		target++;
-	}
-	return false;
 }

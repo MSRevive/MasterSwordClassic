@@ -10,7 +10,6 @@
 
 #include "texturestruct.h"
 #include "tgaloader.h"
-//#include "pcxloader.h"
 #include "textureloader.h"
 
 void DbgLog(char *szFmt, ...);
@@ -42,79 +41,12 @@ namespace Tartan
 		{
 			return LoadTextureTGA(sFilePath, LoadTex);
 		}
-		/*else if( strcmp( filetypestring, ".pcx" ) == 0 )
-	{
-		return LoadTexturePCX( iTextureID, sFilePath );
-	}*/
 		else
 		{
 			std::cout << "Tartan::LoadTextureFile() Error: file type for file " << sFilePath << " unknown." << std::endl;
 			return false;
 		}
 	}
-
-	//! Input:
-	//!
-	//! Returns: True on success.
-	//!
-	//! Description: Loads the "missing texture" placeholder
-	//!
-	//! Thread safety: Thread-safe if the OpenGL library is
-	//!
-	//! History: 20050415 Mark Wagner - Created
-	bool LoadMissingTexture(int &iTextureID)
-	{
-		unsigned char Pixel[4] = {'\255', '\255', '\255'}; // A white pixel
-		GLuint Texture;
-		glGenTextures(1, &Texture);
-		glBindTexture(GL_TEXTURE_2D, Texture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, &Pixel);
-		iTextureID = Texture;
-		return true;
-	}
-
-	//! Input:
-	//!
-	//! Returns: True on success, false otherwise
-	//!
-	//! Description: Loads a PCX image into an OpenGL texture.
-	//! This function based on NeHe texture loading tutorial (http://nehe.gamedev.net)
-	//!
-	//! Thread safety: Unknown
-	//!
-	/*bool LoadTexturePCX( int &iReturnedTextureID, const char *sFilepath )
-{
-	//DEBUG(  "Texture file is at: " << FilePath.GetFullPath().mb_str() ); // DEBUG
-
-	int width, height;
-	unsigned char *pImage = NULL;
-	GLuint iTextureID;
-	bool PCXLoadingResult = LoadPCX( sFilepath, width, height, &pImage );
-	//DEBUG(  "pcxloading result: " << PCXLoadingResult ); // DEBUG
-	if( !PCXLoadingResult )
-	{
-		cout <<  "error loading pcx file " << sFilepath << endl;
-		return false;
-	}
-
-	glGenTextures(1, &iTextureID);				// Create The Texture ( CHANGE )
-	glBindTexture(GL_TEXTURE_2D, iTextureID);
-	
-	cout << "textureid: " << iTextureID << " width " << width << " height " << height << endl;
-	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pImage);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-
-	if (pImage != NULL)						// If Texture Image Exists ( CHANGE )
-	{
-		free(pImage);					// Free The Texture Image Memory ( CHANGE )
-	}
-
-	iReturnedTextureID = iTextureID;
-
-	return true;
-}*/
 
 	//! Input:
 	//!
