@@ -1,12 +1,12 @@
-add_library(steam_api SHARED IMPORTED)
+find_package(CURL REQUIRED)
 
-target_include_directories(steam_api INTERFACE ${BASEDIR}/src/public/steam)
+# target_include_directories(libcurl INTERFACE ${BASEDIR}/thirdparty/libcurl)
 
-if (WIN32)
-	set_target_properties(steam_api PROPERTIES IMPORTED_IMPLIB "${BASEDIR}/lib/public/steam_api.lib")
-else()
-	set_target_properties(steam_api PROPERTIES IMPORTED_IMPLIB "${BASEDIR}/lib/public/linux-x86/libsteam_api.so")
-endif()
+# if (WIN32)
+# 	set_target_properties(libcurl PROPERTIES IMPORTED_IMPLIB "${BASEDIR}/lib/public/libcurl.lib")
+# else()
+# 	set_target_properties(libcurl PROPERTIES IMPORTED_IMPLIB "${BASEDIR}/lib/public/linux-x86/libcurl.lib")
+# endif()
 
 add_library(server SHARED $<$<PLATFORM_ID:Windows>:ms.def>)
 
@@ -15,8 +15,11 @@ set_target_properties(server PROPERTIES OUTPUT_NAME "ms")
 set_common_properties(server)
 
 target_link_libraries(server PRIVATE
-	$<$<PLATFORM_ID:Windows>:wsock32>
-	steam_api)
+	$<$<PLATFORM_ID:Windows>:Ws2_32>
+	$<$<PLATFORM_ID:Windows>:Wldap32>
+	$<$<PLATFORM_ID:Windows>:Crypt32>
+	$<$<PLATFORM_ID:Windows>:Normaliz>
+	CURL::libcurl)
 
 # Include directories
 target_include_directories(server PRIVATE 
@@ -41,7 +44,8 @@ target_include_directories(server PRIVATE
 
 target_compile_definitions(server PRIVATE
 	VERSION_SAFE_STEAM_API_INTERFACES
-	VALVE_DLL)
+	VALVE_DLL
+	CURL_STATICLIB)
 
 if (UNIX)
 	target_compile_definitions(server PRIVATE
@@ -158,7 +162,7 @@ set(MS
 	"store.cpp"
 	"sv_character.cpp"
 	"svglobals.cpp"
-	"SteamServerHelper.cpp"
+	#"SteamServerHelper.cpp"
 	"../shared/movement/pm_shared.cpp"
 	"../shared/movement/pm_shared.h"
 	"../shared/ms/msmonstershared.cpp"
@@ -184,7 +188,7 @@ set(MS_Headers
 	"shield.h"
 	"store.h"
 	"svglobals.h"
-	"SteamServerHelper.h"
+	#"SteamServerHelper.h"
 	"../shared/ms/groupfile.h"
 	"../shared/ms/mscharacter.h"
 	"../shared/ms/mscharacterheader.h"

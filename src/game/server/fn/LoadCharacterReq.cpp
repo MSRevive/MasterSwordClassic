@@ -11,48 +11,51 @@
 #include "util.h"
 
 LoadCharacterRequest::LoadCharacterRequest(ID64 steamID, ID64 slot, const char* url) :
-	HTTPRequest(EHTTPMethod::k_EHTTPMethodGET, url, NULL, NULL, steamID, slot)
+	HTTPRequest(HTTPMethod::GET, url, NULL, NULL, steamID, slot)
 {
 }
 
 void LoadCharacterRequest::OnResponse(bool bSuccessful, int iRespCode)
 {
-	if ((pJSONData == NULL) || (bSuccessful == false))
-		FNShared::Print("Unable to load character %i for SteamID %llu!\n", (slot + 1), steamID64);
-
-	CBasePlayer* pPlayer = UTIL_PlayerBySteamID(steamID64);
-	if (pPlayer == nullptr)
+	if (bSuccessful == false)
 	{
-		FNShared::Print("FATALITY: Unable to get player with SteamID64 %llu\n", steamID64);
+		FNShared::Print("Unable to load character %i for SteamID %llu!\n", (m_iSlot + 1), m_iSteamID64);
 		return;
 	}
 
-	charinfo_t& CharInfo = pPlayer->m_CharInfo[slot];
-
-	if ((pJSONData == NULL) || (bSuccessful == false))
+	CBasePlayer* pPlayer = UTIL_PlayerBySteamID(m_iSteamID64);
+	if (pPlayer == nullptr)
 	{
-		CharInfo.Index = slot;
+		FNShared::Print("FATALITY: Unable to get player with SteamID64 %llu\n", m_iSteamID64);
+		return;
+	}
+
+	charinfo_t& CharInfo = pPlayer->m_CharInfo[m_iSlot];
+
+	if (iRespCode == 204)
+	{
+		CharInfo.Index = m_iSlot;
 		CharInfo.Location = LOC_CENTRAL;
 		CharInfo.Status = CDS_NOTFOUND;
 		CharInfo.m_CachedStatus = CDS_UNLOADED; // force an update!
 		return;
 	}
 
-	const JSONDocument& doc = (*pJSONData);
+	JSONDocument& doc = (*m_JSONResponse);
 	const int flags = doc["data"]["flags"].GetInt();
 
 	if (FNShared::IsBanned(flags) == true)
 	{
-		FNShared::Print("Account banned from FN! %llu!\n", steamID64);
+		FNShared::Print("Account banned from FN! %llu!\n", m_iSteamID64);
 		pPlayer->KickPlayer("You have been banned from FN!");
 		return;
 	}
 
-	requestBodySize = doc["data"]["size"].GetInt();
-	requestBody = new uint8[requestBodySize];
-	memcpy(requestBody, (char*)base64_decode(doc["data"]["data"].GetString()).c_str(), requestBodySize);
+	m_iRequestBodySize = doc["data"]["size"].GetInt();
+	m_sRequestBody = new char[m_iRequestBodySize];
+	memcpy(m_sRequestBody, base64_decode(doc["data"]["data"].GetString()).c_str(), m_iRequestBodySize);
 
-	CharInfo.AssignChar(slot, LOC_CENTRAL, (char*)requestBody, requestBodySize, pPlayer);
+	CharInfo.AssignChar(m_iSlot, LOC_CENTRAL, m_sRequestBody, m_iRequestBodySize, pPlayer);
 	strncpy(CharInfo.Guid, doc["data"]["id"].GetString(), MSSTRING_SIZE);
 	CharInfo.Flags = flags;
 	CharInfo.Status = CDS_LOADED;

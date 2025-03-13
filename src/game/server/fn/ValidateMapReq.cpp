@@ -9,25 +9,23 @@
 #include "global.h"
 
 ValidateMapRequest::ValidateMapRequest(const char* url) :
-	HTTPRequest(EHTTPMethod::k_EHTTPMethodGET, url)
+	HTTPRequest(HTTPMethod::GET, url)
 {
 }
 
 void ValidateMapRequest::OnResponse(bool bSuccessful, int iRespCode)
 {
-	if (bSuccessful == false || pJSONData == NULL)
+	if (bSuccessful == false)
 	{
 		// MSGlobals::CentralEnabled = false;
 		// FNShared::Print("FuzzNet has been disabled!\n");
 		return;
 	}
 
-	const JSONValue& value = (*pJSONData);
-	if (!value["data"].GetBool())
+	JSONDocument& doc = (*m_JSONResponse);
+	if (!doc["data"].GetBool())
 	{
 		FNShared::Print("Map '%s' is not verified for FN!\n", MSGlobals::MapName.c_str());
-		SERVER_COMMAND("map edana");
-		MSGlobals::CentralEnabled = false;
 	}
 
 	FNShared::Print("Map '%s' verified for FN.\n", MSGlobals::MapName.c_str());

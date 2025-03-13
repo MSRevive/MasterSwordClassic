@@ -39,8 +39,8 @@ private:
 class CMemFile : public CGameFile
 {
 public:
-	byte* m_Buffer;
-	size_t m_BufferSize;
+	byte* m_Buffer = nullptr;
+	size_t m_BufferSize = 0;
 
 	CMemFile();
 	CMemFile(int Alloc);

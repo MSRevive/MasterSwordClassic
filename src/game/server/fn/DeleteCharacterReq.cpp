@@ -10,20 +10,23 @@
 #include "util.h"
 
 DeleteCharacterRequest::DeleteCharacterRequest(ID64 steamID, ID64 slot, const char* url) :
-	HTTPRequest(EHTTPMethod::k_EHTTPMethodDELETE, url, NULL, NULL, steamID, slot)
+	HTTPRequest(HTTPMethod::DEL, url, NULL, NULL, steamID, slot)
 {
 }
 
 void DeleteCharacterRequest::OnResponse(bool bSuccessful, int iRespCode)
 {
-	if ((pJSONData == NULL) || (bSuccessful == false))
-		FNShared::Print("Unable to delete character for SteamID %llu!\n", steamID64);
+	if (bSuccessful == false)
+	{
+		FNShared::Print("Unable to delete character for SteamID %llu!\n", m_iSteamID64);
+		return;
+	}
 
-	CBasePlayer* pPlayer = UTIL_PlayerBySteamID(steamID64);
+	CBasePlayer* pPlayer = UTIL_PlayerBySteamID(m_iSteamID64);
 	if (pPlayer == NULL)
 		return;
 
-	charinfo_t& CharInfo = pPlayer->m_CharInfo[slot];
+	charinfo_t& CharInfo = pPlayer->m_CharInfo[m_iSlot];
 	CharInfo.Status = CDS_NOTFOUND;
 	CharInfo.m_CachedStatus = CDS_UNLOADED; // force an update!
 }

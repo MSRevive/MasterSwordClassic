@@ -2,20 +2,20 @@
 // Validate if FN connectivity could be established!
 //
 
-#ifndef HTTP_VALIDATE_CONNECTIVITY_REQUEST_H
-#define HTTP_VALIDATE_CONNECTIVITY_REQUEST_H
+#ifndef HTTP_VALIDATE_CON_REQUEST_H
+#define HTTP_VALIDATE_CON_REQUEST_H
 
 #include "HTTPRequest.h"
 
-class ValidateConnectivityRequest : public HTTPRequest
+class ValidateConRequest : public HTTPRequest
 {
 public:
-	ValidateConnectivityRequest(const char* url);
+	ValidateConRequest(const char* url);
 	void OnResponse(bool bSuccessful, int iRespCode);
-	const char* GetName() { return "ValidateConnectivityRequest"; }
+	const char* GetName() { return "ValidateConRequest"; }
 
 private:
-	ValidateConnectivityRequest(const ValidateConnectivityRequest&);
+	ValidateConRequest(const ValidateConRequest&);
 };
 
 #endif // HTTP_VALIDATE_CONNECTIVITY_REQUEST_H
