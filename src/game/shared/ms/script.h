@@ -390,7 +390,7 @@ float GetNumeric(const char *pszText);
 
 enum scriptconatiner_e {
 	MS_SCRIPT_UKNOWN,	//GenericItemPrecache hasn't been called yet, so we dont know
-	MS_SCRIPT_LIBRARY,	//Scripts loaded from sc.dll
+	MS_SCRIPT_LIBRARY,	//Scripts loaded from pak0.pak
 	MS_SCRIPT_DIR		//Scripts loaded from /scripts
 };
 
