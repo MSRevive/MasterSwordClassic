@@ -40,6 +40,7 @@ function(set_common_properties TARGET_NAME)
 
 	target_compile_definitions(${TARGET_NAME} PRIVATE
 			_CRT_SECURE_NO_WARNINGS
+			_MSR_UTILS
 			$<$<CONFIG:DEBUG>:_DEBUG>
 			$<$<PLATFORM_ID:Linux>:POSIX _POSIX LINUX _LINUX GNUC>)
 
@@ -79,16 +80,20 @@ function(set_common_properties TARGET_NAME)
 			/wd26812)
 	endif()
 
-	target_link_options(${TARGET_NAME} PRIVATE
-			$<$<PLATFORM_ID:Linux>:-static-libstdc++ -Wl)
+	if (UNIX)
+		target_link_options(${TARGET_NAME} PRIVATE
+			$<$<CXX_COMPILER_ID:GNU>:-Wl,--no-undefined>
+			$<$<PLATFORM_ID:Linux>:-static-libstdc++ -Wl,-Map,${TARGET_NAME}_map.txt>)
+	endif()
 endfunction(set_common_properties)
 
 add_compile_definitions($<$<CONFIG:Debug>:DEBUG> $<$<CONFIG:Debug>:_DEBUG>)
 add_compile_definitions($<$<CONFIG:Release>:NDEBUG>)
 
-add_subdirectory(charimport)
+# TODO: charimport is quite broken
+# add_subdirectory(charimport)
 add_subdirectory(maphash)
 add_subdirectory(scriptpack)
 
 # Set Visual Studio starting project
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT client)
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT maphash)

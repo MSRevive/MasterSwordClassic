@@ -14,6 +14,10 @@
 #include "msfileio.h"
 #include <memory>
 
+#ifdef _MSR_UTILS
+IFileSystem* g_pFileSystem;
+#endif // _MSR_UTILS
+
 //Deuplicated from msdebug.h
 #ifdef NOT_HLDLL
 #define msnew new
