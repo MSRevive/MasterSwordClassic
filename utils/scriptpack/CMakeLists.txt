@@ -6,10 +6,14 @@ add_executable(scriptpack)
 set_common_properties(scriptpack)
 
 target_include_directories(scriptpack PRIVATE
-	${BASEDIR}/src/game/server
-	${BASEDIR}/src/game/shared
-	${BASEDIR}/src/game/shared/ms
-	${BASEDIR}/thirdparty
+	${BASEDIR}/../src/common
+	${BASEDIR}/../src/game/server
+	${BASEDIR}/../src/game/server/hl
+	${BASEDIR}/../src/game/shared
+	${BASEDIR}/../src/game/shared/ms
+	${BASEDIR}/../src/public
+	${BASEDIR}/../src/public/engine
+	${BASEDIR}/../thirdparty
 	${CMAKE_CURRENT_SOURCE_DIR}
 	tclap)
 
