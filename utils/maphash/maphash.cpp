@@ -8,7 +8,9 @@
 
 #include "stream_safe.h"
 #include "crc/crchash.h"
-#include "rapidjson/document_safe.h"
+#include "rapidjson/document.h"
+#include "rapidjson/filewritestream.h"
+#include "rapidjson/writer.h"
 
 using namespace std;
 using namespace rapidjson;

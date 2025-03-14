@@ -25,10 +25,8 @@ target_include_directories(charimport PRIVATE
 ################################################################################
 set(Source_Files
 	"charimport.cpp"
-	"../../src/game/shared/ms/httprequesthandler.cpp"
 	"../../src/game/shared/ms/msfileio.cpp"
 	"../../src/game/shared/ms/stackstring.cpp"
-	"../../src/public/tier0/pointeroverride.asm"
 	"../../thirdparty/base64/base64.cpp"
 )
 source_group("Source Files" FILES ${Source_Files})

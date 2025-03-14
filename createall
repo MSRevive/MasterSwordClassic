@@ -1,2 +1,3 @@
 #!/bin/bash
 cmake -S . -B ./build --toolchain ./cmake/LinuxToolchain.cmake $@
+cmake -S utils -B ./utils/build --toolchain ../cmake/LinuxToolchain.cmake $@
